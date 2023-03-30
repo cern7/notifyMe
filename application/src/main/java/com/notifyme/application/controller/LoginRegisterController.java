@@ -1,25 +1,43 @@
 package com.notifyme.application.controller;
 
+import com.notifyme.application.model.Customer;
 import com.notifyme.application.model.User;
+import com.notifyme.application.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
 import java.util.Map;
 
 @RestController
-@RequestMapping(value = "api/")
+@RequestMapping
 public class LoginRegisterController {
 
+    @Autowired
+    private UserService userService;
+
     @GetMapping(value = "register")
-    public String register() {
+    public String registrationForm(Model model) {
+
         return "register";
     }
 
-    @PostMapping(value = "form/register")
-    public ResponseEntity<Map<String, String>> getRegister(@RequestBody User user) {
-        String userEmail = user.getEmailAddress();
-        return ResponseEntity.ok(Collections.singletonMap("email", userEmail));
+    @PostMapping(value = "register")
+//    public String processRegistration(@RequestBody User user) {
+    public String processRegistration(@ModelAttribute("customer") User user, BindingResult result) {
+        if (result.hasErrors()) {
+            return "register";
+        }
+        userService.saveUser(user);
+        return "redirect:/register/success";
+    }
+
+    @GetMapping(value = "register/success")
+    public String successRegistration() {
+        return "registration_success";
     }
 
 }
