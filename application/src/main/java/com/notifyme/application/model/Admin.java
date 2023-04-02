@@ -1,8 +1,12 @@
 package com.notifyme.application.model;
 
+import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Entity;
+
 import java.util.List;
 
-public class Admin extends User{
+@Entity
+public class Admin extends User {
 
     private List<String> role;
     private List<String> permissions;
@@ -18,10 +22,16 @@ public class Admin extends User{
         this.permissions = permissions;
     }
 
+    public Admin() {
+
+    }
+
+    @ElementCollection
     public List<String> getRole() {
         return role;
     }
 
+    @ElementCollection
     public List<String> getPermissions() {
         return permissions;
     }

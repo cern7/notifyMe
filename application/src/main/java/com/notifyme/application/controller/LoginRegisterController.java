@@ -19,20 +19,22 @@ public class LoginRegisterController {
     @Autowired
     private UserService userService;
 
-    @GetMapping(value = "register")
+    @GetMapping(value = "new-register")
     public String registrationForm(Model model) {
 
         return "register";
     }
 
     @PostMapping(value = "register")
-//    public String processRegistration(@RequestBody User user) {
-    public String processRegistration(@ModelAttribute("customer") User user, BindingResult result) {
-        if (result.hasErrors()) {
-            return "register";
-        }
-        userService.saveUser(user);
-        return "redirect:/register/success";
+//    public String processRegistration(@RequestBody Customer customer) {
+    public String processRegistration(@ModelAttribute("customer") Customer customer, BindingResult result) {
+//        if (result.hasErrors()) {
+//            return "register";
+//        }
+
+//        userService.saveUser(user);
+
+        return "redirect:/register/success_";
     }
 
     @GetMapping(value = "register/success")

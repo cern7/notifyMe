@@ -1,5 +1,8 @@
 package com.notifyme.application.model;
 
+import jakarta.persistence.Entity;
+
+//@Entity
 public class Customer extends User {
 
     private String paymentID;
@@ -13,6 +16,10 @@ public class Customer extends User {
         super(firstName, lastName, emailAddress, phoneNumber);
         this.paymentID = paymentID;
         this.invoice = invoice;
+    }
+
+    public Customer() {
+
     }
 
     public String getPaymentID() {

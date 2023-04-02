@@ -1,6 +1,16 @@
 package com.notifyme.application.model;
 
-public abstract class User {
+import jakarta.persistence.Id;
+import jakarta.persistence.MappedSuperclass;
+
+import java.io.Serializable;
+
+@MappedSuperclass
+public abstract class User implements Serializable {
+    /*
+     * https://www.baeldung.com/hibernate-inheritance
+     */
+    @Id
     private Long IID;
     private String firstName;
     private String lastName;
@@ -10,6 +20,7 @@ public abstract class User {
     private String geographicAddress;
     private String createDateTime;
     private String lastLoginDateTime;
+
 
     public User() {
     }

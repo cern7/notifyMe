@@ -1,6 +1,9 @@
 package com.notifyme.application.model;
 
-public class Employee extends User{
+import jakarta.persistence.Entity;
+
+@Entity
+public class Employee extends User {
 
     private String department;
     private String jobTitle;
@@ -17,6 +20,10 @@ public class Employee extends User{
         this.department = department;
         this.jobTitle = jobTitle;
         this.salary = salary;
+    }
+
+    public Employee() {
+
     }
 
     public String getDepartment() {
