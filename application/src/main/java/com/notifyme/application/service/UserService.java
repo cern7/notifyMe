@@ -13,4 +13,9 @@ public class UserService {
     public void saveUser(User user){
 
     }
+
+    /*
+    1. Logic for creating Reset Password Token
+    2. Logic for finding the email in DB
+     */
 }

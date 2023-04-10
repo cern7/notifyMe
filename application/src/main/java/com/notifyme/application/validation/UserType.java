@@ -1,4 +1,4 @@
-package com.notifyme.application.model;
+package com.notifyme.application.validation;
 
 public enum UserType {
     ADMIN,

@@ -1,6 +1,7 @@
 package com.notifyme.application.model;
 
 import jakarta.persistence.Entity;
+import jakarta.validation.Valid;
 
 //@Entity
 public class Customer extends User {
@@ -8,7 +9,7 @@ public class Customer extends User {
     private String paymentID;
     private String invoice;
 
-    public Customer(String firstName, String lastName, String emailAddress, String phoneNumber) {
+    public Customer(@Valid String firstName, String lastName, String emailAddress, String phoneNumber) {
         super(firstName, lastName, emailAddress, phoneNumber);
     }
 

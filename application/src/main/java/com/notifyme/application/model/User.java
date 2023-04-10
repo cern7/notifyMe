@@ -1,7 +1,13 @@
 package com.notifyme.application.model;
 
+import com.notifyme.application.validation.UserStatus;
+import com.notifyme.application.validation.UserStatusSubset;
 import jakarta.persistence.Id;
 import jakarta.persistence.MappedSuperclass;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 
 import java.io.Serializable;
 
@@ -10,13 +16,29 @@ public abstract class User implements Serializable {
     /*
      * https://www.baeldung.com/hibernate-inheritance
      */
+
     @Id
     private Long IID;
+
+    @NotNull(message = "firstName cannot be null")
+    @NotBlank(message = "firstName cannot be empty")
     private String firstName;
+    @NotNull(message = "lastName cannot be null")
+    @NotBlank(message = "lastName cannot be empty")
     private String lastName;
+    @NotNull(message = "emailAddress cannot be null")
+    @Email(regexp = ".+[@].+[\\.].+")
     private String emailAddress;
+    @NotNull(message = "phoneNumber cannot be null")
+    @NotBlank(message = "phonenumber cannot be  empty")
+    @Pattern(regexp = "^\\+40-7[0-9]{2}-[0-9]{3}-[0-9]{3}$",
+            message = "Invalid phone number")
     private String phoneNumber;
-    private String status;
+
+    @NotNull(message = "user status cannot be null")
+    @UserStatusSubset(anyOf = {UserStatus.ACTIVE, UserStatus.INACTIVE,
+            UserStatus.SUSPENDED, UserStatus.CLOSED})
+    private UserStatus status;
     private String geographicAddress;
     private String createDateTime;
     private String lastLoginDateTime;
@@ -52,7 +74,7 @@ public abstract class User implements Serializable {
     }
 
     public void setStatus(String status) {
-        this.status = status;
+        this.status = UserStatus.valueOf(status);
     }
 
     public void setGeographicAddress(String geographicAddress) {
@@ -88,7 +110,7 @@ public abstract class User implements Serializable {
     }
 
     public String getStatus() {
-        return status;
+        return status.getValue();
     }
 
     public String getGeographicAddress() {
