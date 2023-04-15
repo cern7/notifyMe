@@ -82,14 +82,17 @@ USER {
 
  ```
 
-| Relation                                        | Description                                                                             |
-|:-----------------------------------------------:|:---------------------------------------------------------------------------------------:|
-| USER |o--|| CUSTOMER : is                       | (zero/one user can be customer) (one and only one customer can be a user) + solid line  |
-| USER ||--|| ADMIN : is                          | (exactly one user is admin and viceversa)                                               |
-| USER ||--|| EMPLOYEE : is                       | (exactly one user is employee and viceversa)                                            |
-| CUSTOMER }o--|| BOOKING : has                   | (Customer has zero / more bookings) (Booking has exactly one customer)                  |
-| EMPLOYEE }o--|| BOOKING : has                   | (EMPLOYEE has zero / more bookings) (Booking has exactly one employee)                  |
-| SERVICE }o--|| BOOKING : has                    | (SERVICE has zero / more bookings) (Booking has exactly one service)                    |
-| REMINDER ||--|| BOOKING : "is for / has"        | REMINDER is exactly for one BOOKING) (BOOKING has exactly one REMINDER)                 |
-| SERVICE ||--|{ EMPLOYEE_SERVICE : "is provided" | (Exactly one service is provided by one ore more Employees) (Employee )                 |
-| EMPLOYEE ||--|{ EMPLOYEE_SERVICE : provides     | (Exactly one employee provides one or more Service)                                     |
+
+ Relation                                     | Description                                                                                  
+:--------------------------------------------:|:--------------------------------------------------------------------------------------------:
+ 'USER \- CUSTOMER : is'                      | \(zero/one user can be customer\) \(one and only one customer can be a user\) \+ solid line  
+ 'USER \- ADMIN : is'                         | \(exactly one user is admin and viceversa\)                                                  
+ 'USER \- EMPLOYEE : is'                      | \(exactly one user is employee and viceversa\)                                               
+ 'CUSTOMER \- BOOKING : has '                 | \(Customer has zero / more bookings\) \(Booking has exactly one customer\)                   
+ 'EMPLOYEE \- BOOKING : has '                 | \(EMPLOYEE has zero / more bookings\) \(Booking has exactly one employee\)                   
+ 'SERVICE \- BOOKING : has'                   | \(SERVICE has zero / more bookings\) \(Booking has exactly one service\)                     
+ 'REMINDER \- BOOKING : is for / has'         | REMINDER is exactly for one BOOKING\) \(BOOKING has exactly one REMINDER\)                   
+ 'SERVICE \- EMPLOYEE\_SERVICE : is provided' | \(Exactly one service is provided by one ore more Employees\) \(Employee \)                  
+ 'EMPLOYEE \- EMPLOYEE\_SERVICE : provides'   | \(Exactly one employee provides one or more Service\)                                        
+
+
