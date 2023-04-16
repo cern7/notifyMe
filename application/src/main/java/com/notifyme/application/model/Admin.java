@@ -1,23 +1,24 @@
 package com.notifyme.application.model;
 
-import jakarta.persistence.ElementCollection;
-import jakarta.persistence.Entity;
+import jakarta.persistence.*;
 
 import java.util.List;
 
 @Entity
-public class Admin extends User {
+@Table(name = "admin")
+public class Admin {
+    @Id
+    @Column(name = "USER_ID")
+    private Long IID;
 
+    @OneToOne
+    @PrimaryKeyJoinColumn
+    private User user;
     private List<String> role;
     private List<String> permissions;
 
-    public Admin(String firstName,
-                 String lastName,
-                 String emailAddress,
-                 String phoneNumber,
-                 List<String> role,
+    public Admin(List<String> role,
                  List<String> permissions) {
-        super(firstName, lastName, emailAddress, phoneNumber);
         this.role = role;
         this.permissions = permissions;
     }

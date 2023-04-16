@@ -1,23 +1,18 @@
 package com.notifyme.application.controller;
 
-import com.notifyme.application.model.Customer;
 import com.notifyme.application.model.User;
 import com.notifyme.application.service.UserService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
-import java.util.Collections;
 import java.util.Map;
 
 //https://projects.wojtekmaj.pl/react-calendar/
 //https://www.npmjs.com/package/react-calendar/
 @RestController
-@RequestMapping
 public class LoginRegisterController {
 
     @Autowired
@@ -30,10 +25,12 @@ public class LoginRegisterController {
     }
 
     @PostMapping(value = "register")
-    public ResponseEntity<Object> registerSubmit(@Valid @RequestBody Customer customer) {
+    public ResponseEntity<?> registerSubmit(@RequestBody User customer) {
+        userService.addUser(customer);
 
         return ResponseEntity.ok(customer);
     }
+
 
     @GetMapping(value = "login")
     public String loginForm(Model model) {

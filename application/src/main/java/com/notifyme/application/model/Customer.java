@@ -1,26 +1,28 @@
 package com.notifyme.application.model;
 
-import jakarta.persistence.Entity;
-import jakarta.validation.Valid;
+import jakarta.persistence.*;
 
-//@Entity
-public class Customer extends User {
 
+@Entity
+@Table(name="customer")
+public class Customer {
+
+    @Id
+    @Column(name = "USER_ID")
+    private Long IID;
+
+    @OneToOne
+    @PrimaryKeyJoinColumn
+    private User user;
     private String paymentID;
     private String invoice;
 
-    public Customer(@Valid String firstName, String lastName, String emailAddress, String phoneNumber) {
-        super(firstName, lastName, emailAddress, phoneNumber);
-    }
-
-    public Customer(String firstName, String lastName, String emailAddress, String phoneNumber, String paymentID, String invoice) {
-        super(firstName, lastName, emailAddress, phoneNumber);
+    public Customer(String paymentID, String invoice) {
         this.paymentID = paymentID;
         this.invoice = invoice;
     }
 
     public Customer() {
-
     }
 
     public String getPaymentID() {

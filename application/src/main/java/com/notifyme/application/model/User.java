@@ -2,22 +2,28 @@ package com.notifyme.application.model;
 
 import com.notifyme.application.validation.UserStatus;
 import com.notifyme.application.validation.UserStatusSubset;
-import jakarta.persistence.Id;
-import jakarta.persistence.MappedSuperclass;
-import jakarta.validation.constraints.Email;
+import jakarta.persistence.*;
+
+import javax.validation.constraints.Email;
+
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
+import org.springframework.validation.annotation.Validated;
 
 import java.io.Serializable;
 
-@MappedSuperclass
-public abstract class User implements Serializable {
+@Entity
+@Table(name = "user")
+public class User implements Serializable {
     /*
      * https://www.baeldung.com/hibernate-inheritance
      */
 
+    // ADD hashCode(), equals() and toString()!!!!!!!!
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "IID")
     private Long IID;
 
     @NotNull(message = "firstName cannot be null")
@@ -27,7 +33,7 @@ public abstract class User implements Serializable {
     @NotBlank(message = "lastName cannot be empty")
     private String lastName;
     @NotNull(message = "emailAddress cannot be null")
-    @Email(regexp = ".+[@].+[\\.].+")
+    @Email(message = "invalid email address", regexp = ".+[@].+[\\.].+")
     private String emailAddress;
     @NotNull(message = "phoneNumber cannot be null")
     @NotBlank(message = "phonenumber cannot be  empty")
@@ -42,6 +48,7 @@ public abstract class User implements Serializable {
     private String geographicAddress;
     private String createDateTime;
     private String lastLoginDateTime;
+    private String password;
 
 
     public User() {
@@ -50,11 +57,42 @@ public abstract class User implements Serializable {
     public User(String firstName,
                 String lastName,
                 String emailAddress,
-                String phoneNumber) {
+                String phoneNumber,
+                String geographicAddress,
+                String password) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.emailAddress = emailAddress;
         this.phoneNumber = phoneNumber;
+        this.geographicAddress = geographicAddress;
+        this.password = password;
+    }
+
+    public User(Long IID,
+                String firstName,
+                String lastName,
+                String emailAddress,
+                String phoneNumber,
+                String geographicAddress,
+                String password) {
+        this(firstName, lastName, emailAddress, phoneNumber, geographicAddress, password);
+        this.IID = IID;
+    }
+
+    public void setIID(Long IID) {
+        this.IID = IID;
+    }
+
+    public void setStatus(UserStatus status) {
+        this.status = status;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public void setFirstName(String firstName) {
