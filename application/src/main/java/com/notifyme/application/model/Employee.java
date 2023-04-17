@@ -103,4 +103,21 @@ public class Employee {
     public void setSalary(String salary) {
         this.salary = salary;
     }
+
+    public Long getIID() {
+        return IID;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Employee employee = (Employee) o;
+        return IID != null && IID.equals(employee.getIID());
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
 }

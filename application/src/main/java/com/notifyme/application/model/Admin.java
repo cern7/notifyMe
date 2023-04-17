@@ -3,6 +3,7 @@ package com.notifyme.application.model;
 import jakarta.persistence.*;
 
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "admin")
@@ -27,6 +28,10 @@ public class Admin {
 
     }
 
+    public Long getIID() {
+        return IID;
+    }
+
     @ElementCollection
     public List<String> getRole() {
         return role;
@@ -43,5 +48,18 @@ public class Admin {
 
     public void setPermissions(List<String> permissions) {
         this.permissions = permissions;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Admin admin = (Admin) o;
+        return IID != null && IID.equals(admin.getIID());
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
     }
 }

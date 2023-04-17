@@ -2,9 +2,11 @@ package com.notifyme.application.model;
 
 import jakarta.persistence.*;
 
+import java.util.Objects;
+
 
 @Entity
-@Table(name="customer")
+@Table(name = "customer")
 public class Customer {
 
     @Id
@@ -39,5 +41,22 @@ public class Customer {
 
     public void setInvoice(String invoice) {
         this.invoice = invoice;
+    }
+
+    public Long getIID() {
+        return IID;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Customer customer = (Customer) o;
+        return IID != null && IID.equals(customer.getIID());
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
     }
 }

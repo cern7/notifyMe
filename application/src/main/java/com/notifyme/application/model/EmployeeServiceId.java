@@ -34,7 +34,8 @@ public class EmployeeServiceId implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         EmployeeServiceId that = (EmployeeServiceId) o;
-        return Objects.equals(employeeId, that.employeeId) && Objects.equals(serviceId, that.serviceId);
+        return Objects.equals(employeeId, that.employeeId) &&
+                Objects.equals(serviceId, that.serviceId);
     }
 
     @Override

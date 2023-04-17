@@ -12,6 +12,7 @@ import jakarta.validation.constraints.Pattern;
 import org.springframework.validation.annotation.Validated;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 @Entity
 @Table(name = "user")
@@ -20,7 +21,7 @@ public class User implements Serializable {
      * https://www.baeldung.com/hibernate-inheritance
      */
 
-    // ADD hashCode(), equals() and toString()!!!!!!!!
+   // add toString()!!!!!!!!
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "IID")
@@ -162,4 +163,18 @@ public class User implements Serializable {
     public String getLastLoginDateTime() {
         return lastLoginDateTime;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return IID != null && IID.equals(user.getIID());
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
+    //https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
 }

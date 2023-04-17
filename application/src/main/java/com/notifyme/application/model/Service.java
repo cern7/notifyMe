@@ -4,6 +4,7 @@ import antlr.actions.python.CodeLexer;
 import jakarta.persistence.*;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -128,5 +129,18 @@ public class Service {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Service service = (Service) o;
+        return IID != null && IID.equals(service.getIID());
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
     }
 }

@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name="employee_service")
+@Table(name = "employee_service")
 public class EmployeeService {
 
     @EmbeddedId
@@ -63,7 +63,9 @@ public class EmployeeService {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         EmployeeService that = (EmployeeService) o;
-        return Objects.equals(id, that.id) && Objects.equals(employee, that.employee) && Objects.equals(service, that.service);
+        return Objects.equals(id, that.id);
+//                Objects.equals(employee, that.employee) &&
+//                Objects.equals(service, that.service);
     }
 
     @Override
