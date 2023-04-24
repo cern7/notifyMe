@@ -1,6 +1,6 @@
 package com.notifyme.application.model;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
 
 import java.util.Objects;
 
@@ -20,7 +20,7 @@ public class EmployeeService {
     // The Service property is controlled by the serviceId property in
     // EmployeeServiceId
     @ManyToOne
-    @MapsId("EMPLOYEE_ID")
+    @MapsId("USER_ID")
     private Employee employee;
 
     @ManyToOne

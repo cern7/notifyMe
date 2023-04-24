@@ -1,7 +1,7 @@
 package com.notifyme.application.model;
 
-import jakarta.persistence.Embeddable;
-import jakarta.persistence.Column;
+import javax.persistence.Embeddable;
+import javax.persistence.Column;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -15,7 +15,7 @@ public class EmployeeServiceId implements Serializable {
     // mapping a compound identifier when using JPA and Hibernate
 
 
-    @Column(name = "EMPLOYEE_ID")
+    @Column(name = "USER_ID")
     private Long employeeId;
 
     @Column(name = "SERVICE_ID")

@@ -1,10 +1,7 @@
 package com.notifyme.application.model;
 
-import antlr.actions.python.CodeLexer;
-import jakarta.persistence.*;
-
+import javax.persistence.*;
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -20,6 +17,9 @@ public class Service {
     private boolean availability;
     private String category;
     private String imageUrl;
+
+    @OneToMany(mappedBy = "service")
+    private Set<Booking> bookings;
 
     // the relationship is mapped as a bidirectional @OneToMany
     // JPA association

@@ -1,8 +1,9 @@
 package com.notifyme.application.model;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
 
 import java.util.Objects;
+import java.util.Set;
 
 
 @Entity
@@ -14,7 +15,7 @@ public class Customer {
     private Long IID;
 
     @OneToOne
-    @PrimaryKeyJoinColumn
+    @MapsId
     private User user;
     private String paymentID;
     private String invoice;
@@ -23,6 +24,10 @@ public class Customer {
         this.paymentID = paymentID;
         this.invoice = invoice;
     }
+
+    @OneToMany(mappedBy = "customer")
+    private Set<Booking> bookings;
+
 
     public Customer() {
     }

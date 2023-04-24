@@ -1,18 +1,15 @@
 package com.notifyme.application.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.notifyme.application.validation.UserStatus;
 import com.notifyme.application.validation.UserStatusSubset;
-import jakarta.persistence.*;
 
+import javax.persistence.*;
 import javax.validation.constraints.Email;
-
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
-import org.springframework.validation.annotation.Validated;
-
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import java.io.Serializable;
-import java.util.Objects;
 
 @Entity
 @Table(name = "user")
@@ -21,7 +18,7 @@ public class User implements Serializable {
      * https://www.baeldung.com/hibernate-inheritance
      */
 
-   // add toString()!!!!!!!!
+    // add toString()!!!!!!!!
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "IID")
@@ -51,6 +48,39 @@ public class User implements Serializable {
     private String lastLoginDateTime;
     private String password;
 
+    @OneToOne(mappedBy = "user")
+    @JsonBackReference
+    private Admin admin;
+    @OneToOne(mappedBy = "user")
+    @JsonBackReference
+    private Customer customer;
+    @OneToOne(mappedBy = "user")
+    @JsonBackReference
+    private Employee employee;
+
+    public Admin getAdmin() {
+        return admin;
+    }
+
+    public void setAdmin(Admin admin) {
+        this.admin = admin;
+    }
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
+
+    public Employee getEmployee() {
+        return employee;
+    }
+
+    public void setEmployee(Employee employee) {
+        this.employee = employee;
+    }
 
     public User() {
     }
@@ -80,9 +110,6 @@ public class User implements Serializable {
         this.IID = IID;
     }
 
-    public void setIID(Long IID) {
-        this.IID = IID;
-    }
 
     public void setStatus(UserStatus status) {
         this.status = status;

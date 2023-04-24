@@ -1,6 +1,6 @@
 package com.notifyme.application.model;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
 
 import java.util.List;
 import java.util.Objects;
@@ -13,12 +13,16 @@ public class Admin {
     private Long IID;
 
     @OneToOne
-    @PrimaryKeyJoinColumn
+    @MapsId
     private User user;
-    private List<String> role;
+
+    private String role;
+    @ElementCollection
+    @CollectionTable(name = "admin_permissions",
+            joinColumns = @JoinColumn(name = "USER_ID"))
     private List<String> permissions;
 
-    public Admin(List<String> role,
+    public Admin(String role,
                  List<String> permissions) {
         this.role = role;
         this.permissions = permissions;
@@ -32,8 +36,8 @@ public class Admin {
         return IID;
     }
 
-    @ElementCollection
-    public List<String> getRole() {
+
+    public String getRole() {
         return role;
     }
 
@@ -42,7 +46,7 @@ public class Admin {
         return permissions;
     }
 
-    public void setRole(List<String> role) {
+    public void setRole(String role) {
         this.role = role;
     }
 

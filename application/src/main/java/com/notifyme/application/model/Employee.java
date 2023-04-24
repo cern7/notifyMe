@@ -1,6 +1,6 @@
 package com.notifyme.application.model;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
 
 import java.util.*;
 
@@ -12,13 +12,18 @@ public class Employee {
     private Long IID;
 
     // one-to-one relationship with User class
-    // using shared primary key
+    // using shared primary key or derived identifiers
+    // https://docs.jboss.org/hibernate/orm/5.4/userguide/html_single/Hibernate_User_Guide.html#identifiers-derived
+
     @OneToOne
-    @PrimaryKeyJoinColumn
+    @MapsId
     private User user;
     private String department;
     private String jobTitle;
     private String salary;
+
+    @OneToMany(mappedBy = "employee")
+    private Set<Booking> bookings;
 
     // the relationship is mapped as a bidirectional @OneToMany
     // JPA association
