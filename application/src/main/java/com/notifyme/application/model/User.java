@@ -1,19 +1,12 @@
 package com.notifyme.application.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.notifyme.application.validation.UserStatus;
-import com.notifyme.application.validation.UserStatusSubset;
 
 import javax.persistence.*;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
-import java.io.Serializable;
 
 @Entity
-@Table(name = "user")
-public class User implements Serializable {
+@Table(name = "userTbl")
+public class User {
     /*
      * https://www.baeldung.com/hibernate-inheritance
      */
@@ -21,28 +14,23 @@ public class User implements Serializable {
     // add toString()!!!!!!!!
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "IID")
     private Long IID;
 
-    @NotNull(message = "firstName cannot be null")
-    @NotBlank(message = "firstName cannot be empty")
     private String firstName;
-    @NotNull(message = "lastName cannot be null")
-    @NotBlank(message = "lastName cannot be empty")
+
     private String lastName;
-    @NotNull(message = "emailAddress cannot be null")
-    @Email(message = "invalid email address", regexp = ".+[@].+[\\.].+")
+
     private String emailAddress;
-    @NotNull(message = "phoneNumber cannot be null")
-    @NotBlank(message = "phonenumber cannot be  empty")
-    @Pattern(regexp = "^\\+40-7[0-9]{2}-[0-9]{3}-[0-9]{3}$",
-            message = "Invalid phone number")
+    //    @NotNull(message = "phoneNumber cannot be null")
+//    @NotBlank(message = "phonenumber cannot be  empty")
+//    @Pattern(regexp = "^\\+40-7[0-9]{2}-[0-9]{3}-[0-9]{3}$",
+//            message = "Invalid phone number")
     private String phoneNumber;
 
-    @NotNull(message = "user status cannot be null")
-    @UserStatusSubset(anyOf = {UserStatus.ACTIVE, UserStatus.INACTIVE,
-            UserStatus.SUSPENDED, UserStatus.CLOSED})
-    private UserStatus status;
+    //    @NotNull(message = "user status cannot be null")
+//    @UserStatusSubset(anyOf = {UserStatus.ACTIVE, UserStatus.INACTIVE,
+//            UserStatus.SUSPENDED, UserStatus.CLOSED})
+//    private UserStatus status;
     private String geographicAddress;
     private String createDateTime;
     private String lastLoginDateTime;
@@ -111,9 +99,9 @@ public class User implements Serializable {
     }
 
 
-    public void setStatus(UserStatus status) {
-        this.status = status;
-    }
+//    public void setStatus(UserStatus status) {
+//        this.status = status;
+//    }
 
     public String getPassword() {
         return password;
@@ -139,9 +127,9 @@ public class User implements Serializable {
         this.phoneNumber = phoneNumber;
     }
 
-    public void setStatus(String status) {
-        this.status = UserStatus.valueOf(status);
-    }
+//    public void setStatus(String status) {
+//        this.status = UserStatus.valueOf(status);
+//    }
 
     public void setGeographicAddress(String geographicAddress) {
         this.geographicAddress = geographicAddress;
@@ -175,9 +163,9 @@ public class User implements Serializable {
         return phoneNumber;
     }
 
-    public String getStatus() {
-        return status.getValue();
-    }
+//    public String getStatus() {
+//        return status.getValue();
+//    }
 
     public String getGeographicAddress() {
         return geographicAddress;
