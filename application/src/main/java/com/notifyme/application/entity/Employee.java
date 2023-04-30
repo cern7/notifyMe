@@ -8,7 +8,7 @@ import java.util.*;
 @Table(name = "employee")
 public class Employee {
     @Id
-    @Column(name = "USER_ID")
+    @Column(name = "user_id")
     private Long IID;
 
     // one-to-one relationship with User class
@@ -25,13 +25,32 @@ public class Employee {
     @OneToMany(mappedBy = "employee")
     private Set<Booking> bookings;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
-    @JoinTable(name = "employee_to_service",
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(name = "employee_service",
             joinColumns = @JoinColumn(name = "employee_id"),
             inverseJoinColumns = @JoinColumn(name = "service_id"))
     private Set<Service> providedServices;
 
-    // the relationship is mapped as a bidirectional @OneToMany
+    public void setIID(Long IID) {
+        this.IID = IID;
+    }
+
+    public Set<Booking> getBookings() {
+        return bookings;
+    }
+
+    public void setBookings(Set<Booking> bookings) {
+        this.bookings = bookings;
+    }
+
+    public Set<Service> getProvidedServices() {
+        return providedServices;
+    }
+
+    public void setProvidedServices(Set<Service> providedServices) {
+        this.providedServices = providedServices;
+    }
+// the relationship is mapped as a bidirectional @OneToMany
     // JPA association
 
     // The mappedBy attribute tells Hibernate that the
@@ -50,12 +69,14 @@ public class Employee {
 //    private Set<EmployeeService> services = new HashSet<>();
 
 
-    public Employee(String department,
-                    String jobTitle,
-                    String salary) {
+    public Employee(Long IID, User user, String department, String jobTitle, String salary, Set<Booking> bookings, Set<Service> providedServices) {
+        this.IID = IID;
+        this.user = user;
         this.department = department;
         this.jobTitle = jobTitle;
         this.salary = salary;
+        this.bookings = bookings;
+        this.providedServices = providedServices;
     }
 
     public Employee() {

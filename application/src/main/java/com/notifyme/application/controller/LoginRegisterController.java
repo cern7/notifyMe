@@ -12,7 +12,7 @@ import java.util.Map;
 
 //https://projects.wojtekmaj.pl/react-calendar/
 //https://www.npmjs.com/package/react-calendar/
-@RestController
+//@RestController
 public class LoginRegisterController {
 
     @Autowired

@@ -43,6 +43,14 @@ public class Customer {
         return user;
     }
 
+    public Set<Booking> getBookings() {
+        return bookings;
+    }
+
+    public void setBookings(Set<Booking> bookings) {
+        this.bookings = bookings;
+    }
+
     public void setUser(User user) {
         this.user = user;
     }

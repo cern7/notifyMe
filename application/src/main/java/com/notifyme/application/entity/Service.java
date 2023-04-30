@@ -46,14 +46,7 @@ public class Service {
 //    private Set<EmployeeService> employees;
 
 
-    public Service(Long IID,
-                   String name,
-                   String description,
-                   String price,
-                   String duration,
-                   boolean availability,
-                   String category,
-                   String imageUrl) {
+    public Service(Long IID, String name, String description, String price, String duration, boolean availability, String category, String imageUrl, Set<Booking> bookings, Set<Employee> employeesForService) {
         this.IID = IID;
         this.name = name;
         this.description = description;
@@ -62,12 +55,29 @@ public class Service {
         this.availability = availability;
         this.category = category;
         this.imageUrl = imageUrl;
+        this.bookings = bookings;
+        this.employeesForService = employeesForService;
     }
 
     public Service() {
 
     }
 
+    public Set<Booking> getBookings() {
+        return bookings;
+    }
+
+    public void setBookings(Set<Booking> bookings) {
+        this.bookings = bookings;
+    }
+
+    public Set<Employee> getEmployeesForService() {
+        return employeesForService;
+    }
+
+    public void setEmployeesForService(Set<Employee> employeesForService) {
+        this.employeesForService = employeesForService;
+    }
 //    public Set<EmployeeService> getEmployees() {
 //
 //        return employees;
