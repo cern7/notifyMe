@@ -1,5 +1,7 @@
 package com.notifyme.application.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
@@ -20,6 +22,10 @@ public class Service {
 
     @OneToMany(mappedBy = "service")
     private Set<Booking> bookings;
+
+    @ManyToMany(mappedBy = "providedServices")
+    @JsonIgnore
+    private Set<Employee> employeesForService;
 
     // the relationship is mapped as a bidirectional @OneToMany
     // JPA association

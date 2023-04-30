@@ -25,6 +25,12 @@ public class Employee {
     @OneToMany(mappedBy = "employee")
     private Set<Booking> bookings;
 
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @JoinTable(name = "employee_to_service",
+            joinColumns = @JoinColumn(name = "employee_id"),
+            inverseJoinColumns = @JoinColumn(name = "service_id"))
+    private Set<Service> providedServices;
+
     // the relationship is mapped as a bidirectional @OneToMany
     // JPA association
 
@@ -58,6 +64,14 @@ public class Employee {
 
     public Set<EmployeeService> getServices() {
         return services;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     // Bidirectional @OneToMany

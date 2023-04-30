@@ -2,7 +2,6 @@ package com.notifyme.application.model;
 
 import javax.persistence.*;
 
-import java.util.Objects;
 import java.util.Set;
 
 
@@ -38,6 +37,14 @@ public class Customer {
 
     public String getInvoice() {
         return invoice;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public void setPaymentID(String paymentID) {

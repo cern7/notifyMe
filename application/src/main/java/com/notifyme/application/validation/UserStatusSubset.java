@@ -1,6 +1,6 @@
 package com.notifyme.application.validation;
 
-import jakarta.validation.Payload;
+import javax.validation.Payload;
 
 
 import javax.validation.Constraint;

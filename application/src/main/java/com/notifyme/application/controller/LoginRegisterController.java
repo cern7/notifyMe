@@ -2,7 +2,7 @@ package com.notifyme.application.controller;
 
 import com.notifyme.application.model.User;
 import com.notifyme.application.service.UserService;
-import jakarta.servlet.http.HttpSession;
+import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
@@ -26,7 +26,7 @@ public class LoginRegisterController {
 
     @PostMapping(value = "register")
     public ResponseEntity<?> registerSubmit(@RequestBody User customer) {
-        userService.addUser(customer);
+
 
         return ResponseEntity.ok(customer);
     }
