@@ -1,6 +1,6 @@
 package com.notifyme.application.controller;
 
-import com.notifyme.application.model.User;
+import com.notifyme.application.entity.User;
 import com.notifyme.application.service.UserService;
 import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;

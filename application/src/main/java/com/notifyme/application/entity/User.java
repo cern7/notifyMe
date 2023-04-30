@@ -1,8 +1,10 @@
-package com.notifyme.application.model;
+package com.notifyme.application.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "userTbl")
@@ -16,15 +18,20 @@ public class User {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long IID;
 
+    @NotNull
     private String firstName;
 
+    @NotNull
     private String lastName;
 
+
+    @Email
     private String emailAddress;
     //    @NotNull(message = "phoneNumber cannot be null")
 //    @NotBlank(message = "phonenumber cannot be  empty")
 //    @Pattern(regexp = "^\\+40-7[0-9]{2}-[0-9]{3}-[0-9]{3}$",
 //            message = "Invalid phone number")
+    @NotNull
     private String phoneNumber;
 
     //    @NotNull(message = "user status cannot be null")
@@ -34,6 +41,8 @@ public class User {
     private String geographicAddress;
     private String createDateTime;
     private String lastLoginDateTime;
+
+    @NotNull
     private String password;
 
     @OneToOne(mappedBy = "user")

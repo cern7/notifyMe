@@ -1,4 +1,4 @@
-package com.notifyme.application.model;
+package com.notifyme.application.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -10,7 +10,7 @@ import java.util.Set;
 @Table(name = "service")
 public class Service {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long IID;
     private String name;
     private String description;
@@ -40,10 +40,10 @@ public class Service {
     // goes to the EmployeeService child entity, and not to
     // the other parent entity. The same is true for the
     // orphanRemoval attribute
-    @OneToMany(mappedBy = "service",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true)
-    private Set<EmployeeService> employees = new HashSet<>();
+//    @OneToMany(mappedBy = "service",
+//            cascade = CascadeType.ALL,
+//            orphanRemoval = true)
+//    private Set<EmployeeService> employees;
 
 
     public Service(Long IID,
@@ -68,10 +68,10 @@ public class Service {
 
     }
 
-    public Set<EmployeeService> getEmployees() {
-
-        return employees;
-    }
+//    public Set<EmployeeService> getEmployees() {
+//
+//        return employees;
+//    }
 
     public Long getIID() {
         return IID;

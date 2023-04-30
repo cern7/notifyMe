@@ -1,6 +1,6 @@
 package com.notifyme.application.service;
 
-import com.notifyme.application.model.User;
+import com.notifyme.application.entity.User;
 
 import java.util.List;
 
