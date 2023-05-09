@@ -6,7 +6,6 @@ import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Component;
 
 import java.util.Collection;
 import java.util.List;
@@ -21,7 +20,11 @@ public class UserDetailsImpl implements UserDetails {
     private final String email;
     @JsonIgnore
     private final String password;
-
+    private final String firstName;
+    private final String lastName;
+    private final String emailAddress;
+    private final String phoneNumber;
+    private final String type;
     private final String status;
     private final Collection<? extends GrantedAuthority> authorities;
     private final User user;
@@ -29,12 +32,17 @@ public class UserDetailsImpl implements UserDetails {
     public UserDetailsImpl(Long IID,
                            String email,
                            String password,
-                           String status,
+                           String firstName, String lastName, String emailAddress, String phoneNumber, String type, String status,
                            Collection<? extends GrantedAuthority> authorities,
                            User user) {
         this.IID = IID;
         this.email = email;
         this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.emailAddress = emailAddress;
+        this.phoneNumber = phoneNumber;
+        this.type = type;
         this.authorities = authorities;
         this.user = user;
         this.status = status;
@@ -45,7 +53,9 @@ public class UserDetailsImpl implements UserDetails {
                 List.of(new SimpleGrantedAuthority(user.getType().toString()));
 
         return new UserDetailsImpl(user.getIID(), user.getEmailAddress(),
-                user.getPassword(), user.getStatus().toString(), authorities, user);
+                user.getPassword(), user.getFirstName(), user.getLastName(),
+                user.getEmailAddress(), user.getPhoneNumber(), user.getType().toString(),
+                user.getStatus().toString(), authorities, user);
     }
 
     @Override
@@ -70,7 +80,8 @@ public class UserDetailsImpl implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return this.status.toUpperCase(Locale.ROOT).equals("ACTIVE");
+        return true;
+//        return this.status.toUpperCase(Locale.ROOT).equals("ACTIVE");
     }
 
     @Override

@@ -1,9 +1,12 @@
 package com.notifyme.application.model;
 
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 
 import java.util.*;
 
+@NoArgsConstructor
 @Entity
 @Table(name = "employee")
 public class Employee {
@@ -44,10 +47,10 @@ public class Employee {
     // goes to the EmployeeService child entity, and not to
     // the other parent entity. The same is true for the
     // orphanRemoval attribute
-    @OneToMany(mappedBy = "employee",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true)
-    private Set<EmployeeService> services = new HashSet<>();
+//    @OneToMany(mappedBy = "employee",
+//            cascade = CascadeType.ALL,
+//            orphanRemoval = true)
+//    private Set<EmployeeService> services = new HashSet<>();
 
 
     public Employee(String department,
@@ -58,13 +61,14 @@ public class Employee {
         this.salary = salary;
     }
 
-    public Employee() {
-
+    public Employee(Long iid) {
+        this.IID = iid;
     }
 
-    public Set<EmployeeService> getServices() {
-        return services;
-    }
+
+//    public Set<EmployeeService> getServices() {
+//        return services;
+//    }
 
     public User getUser() {
         return user;
@@ -75,29 +79,29 @@ public class Employee {
     }
 
     // Bidirectional @OneToMany
-    public void addService(Service service) {
-        EmployeeService employeeService = new EmployeeService();
-        employeeService.setEmployee(this);
-        employeeService.setService(service);
-        services.add(employeeService);
-        service.getEmployees().add(employeeService);
-
-    }
+//    public void addService(Service service) {
+//        EmployeeService employeeService = new EmployeeService();
+//        employeeService.setEmployee(this);
+//        employeeService.setService(service);
+//        services.add(employeeService);
+//        service.getEmployees().add(employeeService);
+//
+//    }
 
     // need to synchronize two collections and
     // two @ManyToOne associations
-    public void removeService(Service service) {
-        for (Iterator<EmployeeService> iterator = services.iterator(); iterator.hasNext(); ) {
-            EmployeeService employeeService = iterator.next();
-            if (employeeService.getEmployee().equals(this) && employeeService.getService().equals(service)) {
-                iterator.remove();
-                employeeService.getService().getEmployees().remove(employeeService);
-                employeeService.setEmployee(null);
-                employeeService.setService(null);
-                break;
-            }
-        }
-    }
+//    public void removeService(Service service) {
+//        for (Iterator<EmployeeService> iterator = services.iterator(); iterator.hasNext(); ) {
+//            EmployeeService employeeService = iterator.next();
+//            if (employeeService.getEmployee().equals(this) && employeeService.getService().equals(service)) {
+//                iterator.remove();
+//                employeeService.getService().getEmployees().remove(employeeService);
+//                employeeService.setEmployee(null);
+//                employeeService.setService(null);
+//                break;
+//            }
+//        }
+//    }
 
     public String getDepartment() {
         return department;

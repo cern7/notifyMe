@@ -1,9 +1,12 @@
 package com.notifyme.application.model;
 
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 
 import java.util.List;
 
+@NoArgsConstructor
 @Entity
 @Table(name = "admin")
 public class Admin {
@@ -35,8 +38,8 @@ public class Admin {
         this.permissions = permissions;
     }
 
-    public Admin() {
-
+    public Admin(Long iid) {
+        this.IID = iid;
     }
 
     public Long getIID() {

@@ -1,16 +1,17 @@
 package com.notifyme.application.model;
 
 import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 import java.util.Set;
 
 
+@NoArgsConstructor
 @Entity
-
 @Table(name = "customer")
-public class Customer{
+public class Customer {
 
     @Id
     @Column(name = "USER_ID")
@@ -34,10 +35,6 @@ public class Customer{
     @OneToMany(mappedBy = "customer")
     private Set<Booking> bookings;
 
-
-    public Customer() {
-    }
-
     public String getPaymentID() {
         return paymentID;
     }
@@ -46,13 +43,13 @@ public class Customer{
         return invoice;
     }
 
-//    public User getUser() {
-//        return user;
-//    }
-//
-//    public void setUser(User user) {
-//        this.user = user;
-//    }
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 
     public void setPaymentID(String paymentID) {
         this.paymentID = paymentID;

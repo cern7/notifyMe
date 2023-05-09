@@ -63,7 +63,7 @@ public class User {
     @JsonBackReference
     private Admin admin;
 
-    @OneToOne()
+    @OneToOne(mappedBy = "user")
     @JsonBackReference
     private Customer customer;
 
@@ -89,6 +89,8 @@ public class User {
         this.lastLoginDateTime = lastLoginDateTime;
         this.password = password;
     }
+
+
 
     @Override
     public boolean equals(Object o) {

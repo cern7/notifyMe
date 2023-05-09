@@ -40,10 +40,10 @@ public class Service {
     // goes to the EmployeeService child entity, and not to
     // the other parent entity. The same is true for the
     // orphanRemoval attribute
-    @OneToMany(mappedBy = "service",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true)
-    private Set<EmployeeService> employees = new HashSet<>();
+//    @OneToMany(mappedBy = "service",
+//            cascade = CascadeType.ALL,
+//            orphanRemoval = true)
+//    private Set<EmployeeService> employees = new HashSet<>();
 
 
     public Service(Long IID,
@@ -68,10 +68,10 @@ public class Service {
 
     }
 
-    public Set<EmployeeService> getEmployees() {
-
-        return employees;
-    }
+//    public Set<EmployeeService> getEmployees() {
+//
+//        return employees;
+//    }
 
     public Long getIID() {
         return IID;
