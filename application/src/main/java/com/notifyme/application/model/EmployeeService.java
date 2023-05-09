@@ -8,8 +8,9 @@ import java.util.Objects;
 @Table(name = "employee_service")
 public class EmployeeService {
 
-    @EmbeddedId
-    private EmployeeServiceId id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     // The @ManyToOne associations use the @MapsId JPA
     // annotation which tells Hibernate that the underlying FK column
@@ -20,15 +21,15 @@ public class EmployeeService {
     // The Service property is controlled by the serviceId property in
     // EmployeeServiceId
     @ManyToOne
-    @MapsId("USER_ID")
-    private Employee employee;
+    @MapsId("EMPLOYEE_ID")
+        private Employee employee;
 
     @ManyToOne
     @MapsId("SERVICE_ID")
     private Service service;
 
 
-    public EmployeeService(EmployeeServiceId id, Employee employee, Service service) {
+    public EmployeeService(Long id, Employee employee, Service service) {
         this.id = id;
         this.employee = employee;
         this.service = service;
@@ -38,7 +39,7 @@ public class EmployeeService {
 
     }
 
-    public EmployeeServiceId getId() {
+    public Long getId() {
         return id;
     }
 

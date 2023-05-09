@@ -24,8 +24,8 @@ public class Booking {
     @JoinColumn(name = "service_id")
     private Service service;
 
-    @OneToOne(mappedBy = "booking")
-    @JsonBackReference
-    private Reminder reminder;
+//    @OneToOne(mappedBy = "booking")
+//    @JsonBackReference
+//    private Reminder reminder;
 
 }

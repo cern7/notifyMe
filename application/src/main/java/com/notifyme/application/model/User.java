@@ -1,182 +1,93 @@
 package com.notifyme.application.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
+
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
+@ToString
 @Entity
-@Table(name = "userTbl")
+@Table(name = "userTbl", uniqueConstraints = {@UniqueConstraint(columnNames = "emailAddress")})
 public class User {
     /*
      * https://www.baeldung.com/hibernate-inheritance
      */
 
     // add toString()!!!!!!!!
+
+    // admin, customer,
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long IID;
 
+    @NotEmpty
     private String firstName;
 
+    @NotEmpty
     private String lastName;
 
+    @NotEmpty
     private String emailAddress;
-    //    @NotNull(message = "phoneNumber cannot be null")
-//    @NotBlank(message = "phonenumber cannot be  empty")
+    @NotNull(message = "phoneNumber cannot be null")
+    @NotBlank(message = "phonenumber cannot be  empty")
 //    @Pattern(regexp = "^\\+40-7[0-9]{2}-[0-9]{3}-[0-9]{3}$",
 //            message = "Invalid phone number")
     private String phoneNumber;
 
     //    @NotNull(message = "user status cannot be null")
-//    @UserStatusSubset(anyOf = {UserStatus.ACTIVE, UserStatus.INACTIVE,
-//            UserStatus.SUSPENDED, UserStatus.CLOSED})
-//    private UserStatus status;
+    @Enumerated(EnumType.STRING)
+    private UserStatus status;
+
+    @NotNull(message = "user type cannot be null")
+    @Enumerated(EnumType.STRING)
+    private UserType type;
+
     private String geographicAddress;
     private String createDateTime;
     private String lastLoginDateTime;
+    @JsonIgnore
+    @ToString.Exclude
     private String password;
 
     @OneToOne(mappedBy = "user")
     @JsonBackReference
     private Admin admin;
-    @OneToOne(mappedBy = "user")
+
+    @OneToOne()
     @JsonBackReference
     private Customer customer;
+
     @OneToOne(mappedBy = "user")
     @JsonBackReference
     private Employee employee;
+//
 
-    public Admin getAdmin() {
-        return admin;
-    }
-
-    public void setAdmin(Admin admin) {
-        this.admin = admin;
-    }
-
-    public Customer getCustomer() {
-        return customer;
-    }
-
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
-    }
-
-    public Employee getEmployee() {
-        return employee;
-    }
-
-    public void setEmployee(Employee employee) {
-        this.employee = employee;
-    }
-
-    public User() {
-    }
-
-    public User(String firstName,
-                String lastName,
-                String emailAddress,
-                String phoneNumber,
-                String geographicAddress,
-                String password) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.emailAddress = emailAddress;
-        this.phoneNumber = phoneNumber;
-        this.geographicAddress = geographicAddress;
-        this.password = password;
-    }
-
-    public User(Long IID,
-                String firstName,
-                String lastName,
-                String emailAddress,
-                String phoneNumber,
-                String geographicAddress,
-                String password) {
-        this(firstName, lastName, emailAddress, phoneNumber, geographicAddress, password);
+    public User(Long IID, String firstName, String lastName,
+                String emailAddress, String phoneNumber,
+                UserStatus status, UserType type,
+                String geographicAddress, String createDateTime,
+                String lastLoginDateTime, String password) {
         this.IID = IID;
-    }
-
-
-//    public void setStatus(UserStatus status) {
-//        this.status = status;
-//    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public void setFirstName(String firstName) {
         this.firstName = firstName;
-    }
-
-    public void setLastName(String lastName) {
         this.lastName = lastName;
-    }
-
-    public void setEmailAddress(String emailAddress) {
         this.emailAddress = emailAddress;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
-    }
-
-//    public void setStatus(String status) {
-//        this.status = UserStatus.valueOf(status);
-//    }
-
-    public void setGeographicAddress(String geographicAddress) {
+        this.status = status;
+        this.type = type;
         this.geographicAddress = geographicAddress;
-    }
-
-    public void setCreateDateTime(String createDateTime) {
         this.createDateTime = createDateTime;
-    }
-
-    public void setLastLoginDateTime(String lastLoginDateTime) {
         this.lastLoginDateTime = lastLoginDateTime;
-    }
-
-    public Long getIID() {
-        return IID;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public String getEmailAddress() {
-        return emailAddress;
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-//    public String getStatus() {
-//        return status.getValue();
-//    }
-
-    public String getGeographicAddress() {
-        return geographicAddress;
-    }
-
-    public String getCreateDateTime() {
-        return createDateTime;
-    }
-
-    public String getLastLoginDateTime() {
-        return lastLoginDateTime;
+        this.password = password;
     }
 
     @Override

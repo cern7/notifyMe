@@ -1,19 +1,22 @@
 package com.notifyme.application.model;
 
+import lombok.AllArgsConstructor;
+
 import javax.persistence.*;
 
 import java.util.Set;
 
 
 @Entity
+
 @Table(name = "customer")
-public class Customer {
+public class Customer{
 
     @Id
     @Column(name = "USER_ID")
     private Long IID;
 
-    @OneToOne
+    @OneToOne()
     @MapsId
     private User user;
     private String paymentID;
@@ -22,6 +25,10 @@ public class Customer {
     public Customer(String paymentID, String invoice) {
         this.paymentID = paymentID;
         this.invoice = invoice;
+    }
+
+    public Customer(Long IID) {
+        this.IID = IID;
     }
 
     @OneToMany(mappedBy = "customer")
@@ -39,13 +46,13 @@ public class Customer {
         return invoice;
     }
 
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
+//    public User getUser() {
+//        return user;
+//    }
+//
+//    public void setUser(User user) {
+//        this.user = user;
+//    }
 
     public void setPaymentID(String paymentID) {
         this.paymentID = paymentID;
