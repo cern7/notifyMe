@@ -37,14 +37,37 @@ public class User {
     private String lastName;
 
     @NotEmpty
+    @Pattern(regexp = "^(?=.{1,256})" +                                         // Username can be up to 256 chars
+            "(?=.{1,64}@.{1,255}$)" +                                           // Username and domain can't be too long
+            "(?!.*\\\\.\\\\.|.*\\\\.\\\\.@|.*@\\\\." +                          // Can't have consecutive dots or @ symbols, or @ at the beginning or end
+            "|.*@$|.*[\\\\[\\\\]()<>;:,/\"\\\\\\\\\\\\\\[\\\\]#@?=]\\\\.)" +    // Can't have special characters
+            ".*" +                                                              // Match the username part
+            "[a-zA-Z0-9!#$%&'*+\\\\/=?^_`{|}~-]+" +                             // Match the domain part
+            "(?<!\\\\.|\\\\.)" +                                                // Can't end or begin with a dot
+            "@" +                                                               // Match the @ symbol
+            "[a-zA-Z0-9]" +                                                     // Match the first character of the domain
+            "(?:" +                                                             // Start of the domain group
+            "[a-zA-Z0-9-]*" +                                                   // Match zero or more domain characters
+            "[a-zA-Z0-9]" +                                                     // Match a domain character
+            ")?" +                                                              // End of domain group (optional)
+            "(?:" +                                                             // Start of subdomain group (optional)
+            "\\\\." +                                                           // Match a dot
+            "[a-zA-Z0-9]" +                                                     // Match the first character of the subdomain
+            "(?:" +                                                             // Start of subdomain group
+            "[a-zA-Z0-9-]*" +                                                   // Match zero or more subdomain characters
+            "[a-zA-Z0-9]" +                                                     // Match a subdomain character
+            ")?" +                                                              // End of subdomain group (optional)
+            ")*$",                                                              // End of domain and subdomain groups (zero or more times)
+            message = "Invalid email address")
     private String emailAddress;
+
     @NotNull(message = "phoneNumber cannot be null")
     @NotBlank(message = "phonenumber cannot be  empty")
-//    @Pattern(regexp = "^\\+40-7[0-9]{2}-[0-9]{3}-[0-9]{3}$",
-//            message = "Invalid phone number")
+    @Pattern(regexp = "^\\+40-7[0-9]{2}-[0-9]{3}-[0-9]{3}$",
+            message = "Invalid phone number")
     private String phoneNumber;
 
-    //    @NotNull(message = "user status cannot be null")
+    @NotNull(message = "user status cannot be null")
     @Enumerated(EnumType.STRING)
     private UserStatus status;
 
@@ -52,7 +75,10 @@ public class User {
     @Enumerated(EnumType.STRING)
     private UserType type;
 
+    @NotNull(message = "geographic address cannot be null")
     private String geographicAddress;
+
+
     private String createDateTime;
     private String lastLoginDateTime;
     @JsonIgnore
@@ -89,7 +115,6 @@ public class User {
         this.lastLoginDateTime = lastLoginDateTime;
         this.password = password;
     }
-
 
 
     @Override

@@ -23,6 +23,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 
 
 import java.util.Date;
@@ -71,6 +72,9 @@ public class RegisterAuthenticationService {
             throw new RuntimeException("Invalid role");
         }
         // TODO: add more sanity check (email, password etc...)
+        if (!registerRequest.getEmail().equals(registerRequest.getConfirmEmail())) {
+            throw new IllegalArgumentException("Email doesn't match");
+        }
         User user = new User(null, registerRequest.getFirstName(),
                 registerRequest.getLastName(),
                 registerRequest.getEmail(),
@@ -82,7 +86,7 @@ public class RegisterAuthenticationService {
                 null,
                 passwordEncoder.encode(registerRequest.getPassword()));
         userRepository.save(user);
-        // is it saved, need to be updated refresh
+
         Long iid = userRepository.getUserByEmailAddress(registerRequest.getEmail()).getIID();
 
         switch (registerRequest.getType().toUpperCase(Locale.ROOT)) {
