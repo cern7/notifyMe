@@ -36,28 +36,30 @@ public class User {
     @NotEmpty
     private String lastName;
 
+
+    //    @Pattern(regexp = "^(?=.{1,256})" +                                         // Username can be up to 256 chars
+//            "(?=.{1,64}@.{1,255}$)" +                                           // Username and domain can't be too long
+//            "(?!.*\\\\.\\\\.|.*\\\\.\\\\.@|.*@\\\\." +                          // Can't have consecutive dots or @ symbols, or @ at the beginning or end
+//            "|.*@$|.*[\\\\[\\\\]()<>;:,/\"\\\\\\\\\\\\\\[\\\\]#@?=]\\\\.)" +    // Can't have special characters
+//            ".*" +                                                              // Match the username part
+//            "[a-zA-Z0-9!#$%&'*+\\\\/=?^_`{|}~-]+" +                             // Match the domain part
+//            "(?<!\\\\.|\\\\.)" +                                                // Can't end or begin with a dot
+//            "@" +                                                               // Match the @ symbol
+//            "[a-zA-Z0-9]" +                                                     // Match the first character of the domain
+//            "(?:" +                                                             // Start of the domain group
+//            "[a-zA-Z0-9-]*" +                                                   // Match zero or more domain characters
+//            "[a-zA-Z0-9]" +                                                     // Match a domain character
+//            ")?" +                                                              // End of domain group (optional)
+//            "(?:" +                                                             // Start of subdomain group (optional)
+//            "\\\\." +                                                           // Match a dot
+//            "[a-zA-Z0-9]" +                                                     // Match the first character of the subdomain
+//            "(?:" +                                                             // Start of subdomain group
+//            "[a-zA-Z0-9-]*" +                                                   // Match zero or more subdomain characters
+//            "[a-zA-Z0-9]" +                                                     // Match a subdomain character
+//            ")?" +                                                              // End of subdomain group (optional)
+//            ")*$",                                                              // End of domain and subdomain groups (zero or more times)
     @NotEmpty
-    @Pattern(regexp = "^(?=.{1,256})" +                                         // Username can be up to 256 chars
-            "(?=.{1,64}@.{1,255}$)" +                                           // Username and domain can't be too long
-            "(?!.*\\\\.\\\\.|.*\\\\.\\\\.@|.*@\\\\." +                          // Can't have consecutive dots or @ symbols, or @ at the beginning or end
-            "|.*@$|.*[\\\\[\\\\]()<>;:,/\"\\\\\\\\\\\\\\[\\\\]#@?=]\\\\.)" +    // Can't have special characters
-            ".*" +                                                              // Match the username part
-            "[a-zA-Z0-9!#$%&'*+\\\\/=?^_`{|}~-]+" +                             // Match the domain part
-            "(?<!\\\\.|\\\\.)" +                                                // Can't end or begin with a dot
-            "@" +                                                               // Match the @ symbol
-            "[a-zA-Z0-9]" +                                                     // Match the first character of the domain
-            "(?:" +                                                             // Start of the domain group
-            "[a-zA-Z0-9-]*" +                                                   // Match zero or more domain characters
-            "[a-zA-Z0-9]" +                                                     // Match a domain character
-            ")?" +                                                              // End of domain group (optional)
-            "(?:" +                                                             // Start of subdomain group (optional)
-            "\\\\." +                                                           // Match a dot
-            "[a-zA-Z0-9]" +                                                     // Match the first character of the subdomain
-            "(?:" +                                                             // Start of subdomain group
-            "[a-zA-Z0-9-]*" +                                                   // Match zero or more subdomain characters
-            "[a-zA-Z0-9]" +                                                     // Match a subdomain character
-            ")?" +                                                              // End of subdomain group (optional)
-            ")*$",                                                              // End of domain and subdomain groups (zero or more times)
+    @Pattern(regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$",
             message = "Invalid email address")
     private String emailAddress;
 
