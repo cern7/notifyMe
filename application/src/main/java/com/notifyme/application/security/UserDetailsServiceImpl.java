@@ -11,6 +11,7 @@ import com.notifyme.application.model.User;
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 
+    private final static String USER_NOT_FOUND_MSG = "User with email %s not found";
     private final UserRepository userRepository;
 
     public UserDetailsServiceImpl(UserRepository userRepository) {
@@ -21,7 +22,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Transactional
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         User user = userRepository.findByEmailAddress(email)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
+                .orElseThrow(() -> new UsernameNotFoundException(
+                        String.format(USER_NOT_FOUND_MSG, email)));
         return UserDetailsImpl.build(user);
     }
 

@@ -32,7 +32,8 @@ public class UserDetailsImpl implements UserDetails {
     public UserDetailsImpl(Long IID,
                            String email,
                            String password,
-                           String firstName, String lastName, String emailAddress, String phoneNumber, String type, String status,
+                           String firstName, String lastName, String emailAddress, String phoneNumber,
+                           String type, String status,
                            Collection<? extends GrantedAuthority> authorities,
                            User user) {
         this.IID = IID;

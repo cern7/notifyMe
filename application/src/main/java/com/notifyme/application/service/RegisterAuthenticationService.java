@@ -7,6 +7,7 @@ import com.notifyme.application.dto.UserRegisterRequest;
 import com.notifyme.application.model.*;
 
 import com.notifyme.application.registration.OnRegistrationCompleteEvent;
+import com.notifyme.application.registration.email.EmailSender;
 import com.notifyme.application.repository.*;
 import com.notifyme.application.security.UserDetailsImpl;
 import lombok.extern.slf4j.Slf4j;
@@ -41,6 +42,7 @@ public class RegisterAuthenticationService {
     private final CustomerRepository customerRepository;
     private final PasswordEncoder passwordEncoder;
     private final JWTService jwtService;
+    private final EmailSender emailSender;
 
     private final ApplicationEventPublisher eventPublisher;
 
@@ -53,6 +55,7 @@ public class RegisterAuthenticationService {
                                          JWTService jwtService,
                                          EmployeeRepository employeeRepository,
                                          AdminRepository adminRepository,
+                                         EmailSender emailSender,
                                          ApplicationEventPublisher eventPublisher) {
         this.authenticationManager = authenticationManager;
         this.userRepository = userRepository;
@@ -62,6 +65,7 @@ public class RegisterAuthenticationService {
         this.jwtService = jwtService;
         this.employeeRepository = employeeRepository;
         this.adminRepository = adminRepository;
+        this.emailSender = emailSender;
         this.eventPublisher = eventPublisher;
     }
 
@@ -119,8 +123,8 @@ public class RegisterAuthenticationService {
             }
         }
 
-        try {
-            String appUrl = request.getContextPath();
+         try {
+            String appUrl = request.getContextPath();// appUrl is empty???
             eventPublisher.publishEvent(new OnRegistrationCompleteEvent(
                     user, request.getLocale(), appUrl));
         } catch (RuntimeException e) {

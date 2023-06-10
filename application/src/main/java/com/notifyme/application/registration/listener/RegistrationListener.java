@@ -1,15 +1,13 @@
 package com.notifyme.application.registration.listener;
 
+
 import com.notifyme.application.model.User;
 import com.notifyme.application.registration.OnRegistrationCompleteEvent;
+import com.notifyme.application.registration.email.EmailSender;
 import com.notifyme.application.service.RegisterAuthenticationService;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.MessageSource;
-import org.springframework.context.annotation.Bean;
-import org.springframework.core.env.Environment;
 import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.stereotype.Component;
 
 import java.util.UUID;
@@ -20,18 +18,15 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
 
     private MessageSource messages;
 
-    private JavaMailSender mailSender;
+    private EmailSender mailSender;
 
-    private Environment env;
 
     public RegistrationListener(RegisterAuthenticationService registerService,
                                 MessageSource messages,
-                                JavaMailSender mailSender,
-                                Environment env) {
+                                EmailSender mailSender) {
         this.registerService = registerService;
         this.messages = messages;
         this.mailSender = mailSender;
-        this.env = env;
     }
 
 
@@ -39,6 +34,7 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
     public void onApplicationEvent(final OnRegistrationCompleteEvent event) {
         this.confirmRegistration(event);
     }
+
 
     private void confirmRegistration(final OnRegistrationCompleteEvent event) {
         final User user = event.getUser();
@@ -54,7 +50,7 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
                                                           final String token) {
         final String recipientAddress = user.getEmailAddress();
         final String subject = "Registration Confirmation";
-        final String confirmationUrl = event.getAppUrl() + "/registrationConfirm?token=" + token;
+        final String confirmationUrl = "http://localhost:5173/register/confirmEmail/" + token;
         final String message = messages.getMessage("message.regSuccLink",
                 null,
                 "You registered successfully. To confirm your " +
@@ -63,8 +59,8 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
         final SimpleMailMessage email = new SimpleMailMessage();
         email.setTo(recipientAddress);
         email.setSubject(subject);
-        email.setText(message+ " \r\n" + confirmationUrl);
-        email.setFrom(env.getProperty("support.email"));
+        email.setText(message + " \r\n" + confirmationUrl);
+        email.setFrom("office@notifyme.com");
         return email;
     }
 }

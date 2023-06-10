@@ -35,7 +35,7 @@ public class RegisterAuthenticationController {
         return registerAuthenticationService.registerNewCustomer(registerRequest, request);
     }
 
-    @GetMapping("/registrationConfirm")
+    @PostMapping("/registrationConfirm")
     public ResponseEntity<?> confirmRegistration(WebRequest request,
                                                  Model model,
                                                  @RequestParam("token") String token) {
