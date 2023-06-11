@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 
 import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDateTime;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
@@ -123,7 +124,7 @@ public class RegisterAuthenticationService {
             }
         }
 
-         try {
+        try {
             String appUrl = request.getContextPath();// appUrl is empty???
             eventPublisher.publishEvent(new OnRegistrationCompleteEvent(
                     user, request.getLocale(), appUrl));
@@ -135,6 +136,7 @@ public class RegisterAuthenticationService {
     }
 
 
+    @Transactional
     public ResponseEntity<?> loginUser(AuthenticationRequest authenticationRequest) {
         Authentication authentication = authenticationManager
                 .authenticate(new UsernamePasswordAuthenticationToken(
@@ -151,6 +153,9 @@ public class RegisterAuthenticationService {
                 .map(GrantedAuthority::getAuthority)
                 .toList()
                 .get(0);
+
+        Date loginTime = new Date();
+        userRepository.updateLoginTime(userDetails.getIID(), loginTime.toString());
 
         return ResponseEntity.ok()
                 .header(HttpHeaders.SET_COOKIE, jwtCookie.toString())

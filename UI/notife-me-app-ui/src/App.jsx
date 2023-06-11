@@ -6,15 +6,17 @@ import RegisterPage from './RegisterAuthentication/RegisterPage'
 import { Routes, Route } from 'react-router-dom'
 import ConfirmEmailComponent from './RegisterAuthentication/ConfirmEmailComponent'
 import Login from './RegisterAuthentication/Login'
+import HomeComponent from './HomeComponent'
 
 function App() {
 
   return (
     <>
       <Routes>
-        <Route path='/login' element={<Login/>}/>
+        <Route path='/login' element={<Login />} />
         <Route path='/register' element={<RegisterPage />} />
         <Route path='/register/confirmEmail/:token' element={<ConfirmEmailComponent />} />
+        <Route path='/home' element={<HomeComponent />} />
       </Routes>
 
     </>

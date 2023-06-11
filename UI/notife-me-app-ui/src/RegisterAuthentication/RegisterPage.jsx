@@ -105,8 +105,8 @@ const RegisterPage = () => {
   };
 
   return (
-    <Box sx={{ maxWidth: 400, mx: 'auto', mt: 4, px: 2 }}>
-      <Typography variant="h4" align="center" gutterBottom>
+    <Box sx={{ maxWidth: 400, mx: 'auto', mt: 4, px: 2 }} style={{ backgroundColor: '#e4dac8', borderRadius: '50px' }}>
+      <Typography variant="h4" align="center" gutterBottom color='#505749'>
         Register
       </Typography>
       <form onSubmit={handleSubmit}>
