@@ -2,9 +2,6 @@ package com.notifyme.application.controller;
 
 import com.notifyme.application.dto.AuthenticationRequest;
 import com.notifyme.application.dto.UserRegisterRequest;
-import com.notifyme.application.model.User;
-import com.notifyme.application.model.VerificationToken;
-import com.notifyme.application.repository.VerificationTokenRepository;
 import com.notifyme.application.service.RegisterAuthenticationService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

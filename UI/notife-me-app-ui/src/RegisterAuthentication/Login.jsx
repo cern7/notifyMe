@@ -4,9 +4,10 @@ import { Box, Button, Container, TextField, Typography } from '@mui/material';
 import { useDispatch } from 'react-redux';
 import { setUserData } from '../actions/userToken'
 import { useNavigate } from 'react-router-dom';
+import Cookies from 'js-cookie';
 
 const Login = () => {
-  const [username, setEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -19,13 +20,15 @@ const Login = () => {
         password,
       }
       const response = await loginRequest(userDTO);
+      // save userToken in cookies
+      const token = response.data.token;
+      Cookies.set('jwtToken', token, { sameSite: 'strict' });
       // save userData in store
       dispatch(setUserData(
-        response.data.token,
         response.data.userDetails.iid,
         response.data.userDetails.type
       ));
-      setEmail('');
+      setUsername('');
       setPassword('');
       navigate('/home');
     } catch (error) {
@@ -45,7 +48,7 @@ const Login = () => {
             label="Email"
             type="email"
             value={username}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={(e) => setUsername(e.target.value)}
             fullWidth
             margin="normal"
             required

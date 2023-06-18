@@ -5,9 +5,7 @@ import com.notifyme.application.dto.AuthenticationResponse;
 import com.notifyme.application.dto.UserDTO;
 import com.notifyme.application.dto.UserRegisterRequest;
 import com.notifyme.application.model.*;
-
 import com.notifyme.application.registration.OnRegistrationCompleteEvent;
-import com.notifyme.application.registration.email.EmailSender;
 import com.notifyme.application.repository.*;
 import com.notifyme.application.security.UserDetailsImpl;
 import lombok.extern.slf4j.Slf4j;
@@ -23,11 +21,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.GetMapping;
-
 
 import javax.servlet.http.HttpServletRequest;
-import java.time.LocalDateTime;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
@@ -43,8 +38,6 @@ public class RegisterAuthenticationService {
     private final CustomerRepository customerRepository;
     private final PasswordEncoder passwordEncoder;
     private final JWTService jwtService;
-    private final EmailSender emailSender;
-
     private final ApplicationEventPublisher eventPublisher;
 
 
@@ -56,7 +49,6 @@ public class RegisterAuthenticationService {
                                          JWTService jwtService,
                                          EmployeeRepository employeeRepository,
                                          AdminRepository adminRepository,
-                                         EmailSender emailSender,
                                          ApplicationEventPublisher eventPublisher) {
         this.authenticationManager = authenticationManager;
         this.userRepository = userRepository;
@@ -66,7 +58,6 @@ public class RegisterAuthenticationService {
         this.jwtService = jwtService;
         this.employeeRepository = employeeRepository;
         this.adminRepository = adminRepository;
-        this.emailSender = emailSender;
         this.eventPublisher = eventPublisher;
     }
 
@@ -94,28 +85,48 @@ public class RegisterAuthenticationService {
                 registerRequest.getEmail(),
                 registerRequest.getPhoneNumber(),
                 UserStatus.PENDING,
-                UserType.valueOf(registerRequest.getType()),
+                UserType.valueOf(type),
                 registerRequest.getGeographicAddress(),
                 new Date().toString(),
                 null,
                 passwordEncoder.encode(registerRequest.getPassword()));
+
         userRepository.save(user);
 
         Long iid = userRepository.getUserByEmailAddress(registerRequest.getEmail()).getIID();
 
-        switch (registerRequest.getType().toUpperCase(Locale.ROOT)) {
+        saveUserBasedOnType(iid, user, type.toUpperCase(Locale.ROOT));
+
+        publishEvent(user, request);
+
+        return ResponseEntity.ok("User registered successfully");
+    }
+
+    private boolean publishEvent(User user, HttpServletRequest request) {
+        try {
+            String appUrl = request.getContextPath();// appUrl is empty???
+            eventPublisher.publishEvent(new OnRegistrationCompleteEvent(
+                    user, request.getLocale(), appUrl));
+            return true;
+        } catch (RuntimeException e) {
+            throw new RuntimeException("Send email not published");
+        }
+    }
+
+    private void saveUserBasedOnType(Long userId, User user, String userType) {
+        switch (userType) {
             case "CUSTOMER" -> {
-                Customer userCustomer = new Customer(iid);
+                Customer userCustomer = new Customer(userId);
                 userCustomer.setUser(user);
                 customerRepository.save(userCustomer);
             }
             case "EMPLOYEE" -> {
-                Employee userEmployee = new Employee(iid);
+                Employee userEmployee = new Employee(userId);
                 userEmployee.setUser(user);
                 employeeRepository.save(userEmployee);
             }
             case "ADMIN" -> {
-                Admin userAdmin = new Admin(iid);
+                Admin userAdmin = new Admin(userId);
                 userAdmin.setUser(user);
                 adminRepository.save(userAdmin);
             }
@@ -123,16 +134,6 @@ public class RegisterAuthenticationService {
                 log.warn("No User Type provided");
             }
         }
-
-        try {
-            String appUrl = request.getContextPath();// appUrl is empty???
-            eventPublisher.publishEvent(new OnRegistrationCompleteEvent(
-                    user, request.getLocale(), appUrl));
-        } catch (RuntimeException e) {
-            return ResponseEntity.internalServerError().build();
-        }
-
-        return ResponseEntity.ok("User registered successfully");
     }
 
 
@@ -148,6 +149,7 @@ public class RegisterAuthenticationService {
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
 
         ResponseCookie jwtCookie = jwtService.generateJwtCookie(userDetails);
+
 
         String role = userDetails.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)

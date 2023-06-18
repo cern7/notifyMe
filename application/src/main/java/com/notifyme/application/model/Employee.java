@@ -78,6 +78,22 @@ public class Employee {
         this.user = user;
     }
 
+    public Set<Service> getProvidedServices() {
+        return this.providedServices;
+    }
+
+    public void setProvidedServices(Set<Service> services) {
+        if (providedServices == null) {
+            providedServices = services;
+        } else {
+            addProvidedServices(services);
+        }
+    }
+
+    private void addProvidedServices(Set<Service> services) {
+        providedServices.addAll(services);
+    }
+
     // Bidirectional @OneToMany
 //    public void addService(Service service) {
 //        EmployeeService employeeService = new EmployeeService();

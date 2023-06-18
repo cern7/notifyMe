@@ -3,7 +3,6 @@ package com.notifyme.application.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
-import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -12,7 +11,7 @@ public class Service {
     @Id
     @GeneratedValue
     private Long IID;
-    private String name;
+    private String serviceName;
     private String description;
     private String price;
     private String duration;
@@ -55,7 +54,7 @@ public class Service {
                    String category,
                    String imageUrl) {
         this.IID = IID;
-        this.name = name;
+        this.serviceName = name;
         this.description = description;
         this.price = price;
         this.duration = duration;
@@ -81,12 +80,12 @@ public class Service {
         this.IID = IID;
     }
 
-    public String getName() {
-        return name;
+    public String getServiceName() {
+        return serviceName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setServiceName(String serviceName) {
+        this.serviceName = serviceName;
     }
 
     public String getDescription() {

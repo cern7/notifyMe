@@ -2,8 +2,9 @@ import axios from "axios";
 const BASE_API = "http://localhost:8080/api/auth/login";
 
 const postMethodConfig = {
-  header: {
+  headers: {
     'Content-type': 'application/json; charset=UTF-8',
+    'withCredentials': true,
   },
 };
 
