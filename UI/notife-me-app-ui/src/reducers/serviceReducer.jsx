@@ -37,22 +37,3 @@ function serviceReducer(state = initialState, action) {
 export default serviceReducer;
 
 
-// return {
-//   ...state,
-//   services: [
-//     ...state.services,
-//     {
-//       serviceName: action.payload.serviceName,
-//       description: action.payload.description,
-//       price: action.payload.price,
-//       duration: action.payload.duration,
-//       availability: action.payload.availability,
-//       category: action.payload.category,
-//       imageUrl: action.payload.imageUrl,
-//       iid: action.payload.iid
-//     },
-//   ],
-// };
-// } else {
-// return state
-// }

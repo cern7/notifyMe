@@ -65,6 +65,8 @@ public class SecurityConfig {
                 .authorizeRequests().antMatchers(HttpMethod.POST, "/api/service/book").hasAnyAuthority("CUSTOMER")
                 .and()
                 .authorizeRequests().antMatchers(HttpMethod.POST, "/api/service/addEmployeeToService/*").hasAnyAuthority("ADMIN")
+                .and()
+                .authorizeRequests().antMatchers(HttpMethod.GET, "/api/booking/customer/all/*").hasAnyAuthority("CUSTOMER")
                 .anyRequest().authenticated()
                 .and()
                 .exceptionHandling().authenticationEntryPoint(authExceptionHandler).accessDeniedHandler(accessDeniedHandler);
