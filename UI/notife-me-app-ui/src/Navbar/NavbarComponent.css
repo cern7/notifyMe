@@ -6,9 +6,10 @@
   margin-right: 8px;
 }
 
+
 .exportedIcon {
   display: none;
-
+background-color: #272626;
   @media (min-width: 600px) {
     display: flex;
   }

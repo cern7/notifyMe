@@ -2,9 +2,9 @@ import React, { useState } from 'react'
 import { loginRequest } from '../api/LoginApi';
 import { Box, Button, Container, TextField, Typography } from '@mui/material';
 import { useDispatch } from 'react-redux';
-import { setUserData } from '../actions/userToken'
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
+
 
 const Login = () => {
   const [username, setUsername] = useState('');
@@ -16,18 +16,16 @@ const Login = () => {
     e.preventDefault();
     try {
       const userDTO = {
-        username,
+        username, 
         password,
       }
       const response = await loginRequest(userDTO);
       // save userToken in cookies
       const token = response.data.token;
       Cookies.set('jwtToken', token, { sameSite: 'strict' });
-      // save userData in store
-      dispatch(setUserData(
-        response.data.userDetails.iid,
-        response.data.userDetails.type
-      ));
+      // save userData to localStorage
+      localStorage.setItem('userId', response.data.userDetails.iid)
+      localStorage.setItem('userType', response.data.userDetails.type)
       setUsername('');
       setPassword('');
       navigate('/home');
@@ -39,8 +37,8 @@ const Login = () => {
   }
   return (
     <Container maxWidth="sm" style={{ backgroundColor: '' }}>
-      <Box mt={5} textAlign="center" style={{ backgroundColor: '#a79d52', borderRadius: '50px' }}>
-        <Typography variant="h4" component="h1" gutterBottom>
+      <Box mt={5} textAlign="center" style={{ backgroundColor: '#e4dac8', borderRadius: '50px' }}>
+        <Typography variant="h4" component="h1" gutterBottom color='#505749'>
           Login
         </Typography>
         <form onSubmit={handleSubmit}>

@@ -51,13 +51,14 @@ public class JWTService {
     public String generateTokenForUser(User user) {
         return Jwts.builder().setSubject(user.getEmailAddress())
                 .setIssuedAt(new Date())
-//                .claim("testkey", "value")
+                .claim("userId", user.getIID())
+                .claim("userType", user.getType())
                 .setExpiration(new Date(new Date().getTime() + jwtExpirationMs))
                 .signWith(SignatureAlgorithm.HS512, jwtSecret)
                 .compact();
     }
 
-    public String getEmailFromToken(String token){
+    public String getEmailFromToken(String token) {
         return Jwts.parser().setSigningKey(jwtSecret)
                 .parseClaimsJws(token)
                 .getBody()

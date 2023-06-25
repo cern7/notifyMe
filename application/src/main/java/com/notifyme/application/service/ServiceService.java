@@ -50,4 +50,33 @@ public class ServiceService {
 
         return ResponseEntity.ok("New Service added successfully");
     }
+
+    public ResponseEntity<?> getAllEmployeesToService(Long serviceId) {
+        //find all employees ids for this service id
+        // get all employees info and return
+        return ResponseEntity.ok(employeeRepository.getAllByServiceID(serviceId));
+    }
+
+    @Transactional
+    public ResponseEntity<?> addEmployeeToService(List<Long> employeeIds, Long serviceId) {
+        if (employeeIds == null || employeeIds.isEmpty()) {
+            return ResponseEntity.badRequest().body("Couldn't add employee to service");
+        }
+
+        Service service = serviceRepository.findById(serviceId).orElse(null);
+
+        if (service == null) {
+            return ResponseEntity.badRequest().body(String.format("There is no service: %d", serviceId));
+        }
+
+        employeeIds.forEach(id -> {
+            Employee employee = employeeRepository.findById(id).orElse(null);
+            if (employee != null) {
+                employee.setProvidedServices(Set.of(service));
+                employeeRepository.save(employee);
+            }
+        });
+
+        return ResponseEntity.ok("employee_to_service saved");
+    }
 }

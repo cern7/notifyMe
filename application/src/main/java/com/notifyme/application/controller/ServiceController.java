@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
+@CrossOrigin(origins = "*")
 @RequestMapping("api/service")
 public class ServiceController {
 
@@ -37,5 +38,16 @@ public class ServiceController {
     @PostMapping("/booking")
     public ResponseEntity<?> bookService(@RequestBody BookingRequest bookingRequest) {
         return bookingService.addNewBooking(bookingRequest);
+    }
+
+    @GetMapping("/allEmployeesToService/{serviceId}")
+    public ResponseEntity<?> getAllEmployeesToService(@PathVariable Long serviceId) {
+        return service.getAllEmployeesToService(serviceId);
+    }
+
+    @PostMapping("/addEmployeeToService/{serviceId}")
+    public ResponseEntity<?> addEmployeeToService(@RequestBody List<Long> employeeIds,
+                                                  @PathVariable Long serviceId) {
+        return service.addEmployeeToService(employeeIds, serviceId);
     }
 }

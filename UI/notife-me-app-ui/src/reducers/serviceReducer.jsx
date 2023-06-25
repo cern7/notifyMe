@@ -10,21 +10,25 @@ function serviceReducer(state = initialState, action) {
     case SET_AVAILABLE_SERVICES:
       const existingIndex = state.services.find((service) => service.iid === action.payload.iid);
       if (!existingIndex) {
-        console.log("set Service in reducer: " + action.payload.description);
         return {
-          
           ...state,
           services: [
             ...state.services,
             {
-              services : action.payload.services,
+              serviceName: action.payload.serviceName,
+              description: action.payload.description,
+              price: action.payload.price,
+              duration: action.payload.duration,
+              availability: action.payload.availability,
+              category: action.payload.category,
+              imageUrl: action.payload.imageUrl,
+              iid: action.payload.iid,
             },
           ],
         };
       } else {
         return state
       }
-
     default:
       return state;
   }

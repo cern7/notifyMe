@@ -9,21 +9,45 @@ import Login from './RegisterAuthentication/Login'
 import HomeComponent from './HomeComponent'
 import ServiceComponent from './services/ServiceComponent'
 import NavbarComponent from './Navbar/NavbarComponent'
+import { createTheme, ThemeProvider } from '@mui/material';
+import MyBookings from './booking/MyBookings'
+import BookingComponent from './booking/BookingComponent'
+const theme = createTheme({
+  pallette: {
+    background: {
+      paper: '#fff',
+    },
+    text: {
+      primary: '#173A5E',
+      secondary: '#173A5E',
+    },
+    action: {
+      active: '#001E3C',
+    },
+    success: {
+      dark: '#002d28',
+    },
+  },
+});
+
 
 function App() {
 
+
   return (
-    <>
-      {/* <NavbarComponent /> */}
+    <ThemeProvider theme={theme}>
+      <NavbarComponent />
       <Routes>
         <Route path='/login' element={<Login />} />
         <Route path='/register' element={<RegisterPage />} />
         <Route path='/register/confirmEmail/:token' element={<ConfirmEmailComponent />} />
         <Route path='/home' element={<HomeComponent />} />
         <Route path='/service' element={<ServiceComponent />} />
+        <Route path='/bookings/all' element={<MyBookings />} />
+        <Route path='/booking' element={<BookingComponent />} />
       </Routes>
 
-    </>
+    </ThemeProvider>
   )
 }
 

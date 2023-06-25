@@ -1,0 +1,89 @@
+.CalendarHeader {
+  text-align: center;
+  font-size: 18px;
+  margin-bottom: 10px;
+  width: 500;
+}
+
+.CalendarContainer {
+  width: 300px;
+  margin: 0 auto;
+  /* background-color: #fff; */
+  border-radius: 4px;
+  padding: 20px;
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  z-index: 999;
+}
+
+.CalendarWrapper {
+  height: 300px;
+
+}
+
+.calendarIcon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 5px;
+}
+
+
+.CalendarBody {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 5px;
+  text-align: center;
+}
+
+.CalendarDay {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 30px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+}
+
+.CalendarDay.selected {
+  cursor: pointer;
+}
+
+.CalendarDay:hover {
+  background-color: #f2f2f2;
+  cursor: pointer;
+}
+
+.CalendarButton {
+  margin-top: 10px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 10px;
+  width: 100%;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.CalendarButton:hover {
+  background-color: #0056b3;
+}
+
+.CalendarBody .CalendarDay.disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.CalendarBody .CalendarDay.outsideMonth {
+  color: #ccc;
+}
+
+.CalendarBody .CalendarDay.today {
+  font-weight: bold;
+}
+
+.CalendarBody .CalendarDay:last-child,
+.CalendarBody .CalendarDay:nth-child(7n) {
+  background-color: #f2f2f2;
+}

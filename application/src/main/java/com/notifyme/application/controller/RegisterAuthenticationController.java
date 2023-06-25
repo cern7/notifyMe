@@ -14,6 +14,7 @@ import javax.validation.Valid;
 import java.util.Locale;
 
 @RestController
+@CrossOrigin(origins = "*")
 @RequestMapping("api/auth")
 public class RegisterAuthenticationController {
 
