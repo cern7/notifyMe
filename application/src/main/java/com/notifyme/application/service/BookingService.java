@@ -9,11 +9,16 @@ import com.notifyme.application.repository.EmployeeRepository;
 import com.notifyme.application.repository.ServiceRepository;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.awt.print.Book;
 import java.lang.annotation.Repeatable;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @org.springframework.stereotype.Service
@@ -104,6 +109,42 @@ public class BookingService {
         });
 
         return ResponseEntity.ok(responseBookings);
+    }
+
+    public ResponseEntity<?> getAllBookings() {
+        String today = String.valueOf(System.currentTimeMillis());
+        List<Booking> allBookings = bookingRepository.getAllByStartDateTimeAfter(today);
+        return ResponseEntity.ok(allBookings);
+    }
+
+    private List<Booking> getAllBookingsBetween(Long startDate, Long endDate) {
+
+        if (startDate == null || endDate == null) {
+            throw new IllegalArgumentException("Start date and end date must not be null");
+        }
+
+        if (startDate >= endDate) {
+            throw new IllegalArgumentException("Start date must be earlier than end date");
+        }
+
+        return bookingRepository.getAllBetweenStartAndEndDate(startDate.toString(), endDate.toString())
+                .orElse(null);
+    }
+
+    public List<Booking> getAllBookingsToRemind() {
+
+        long today = LocalDateTime.now().toEpochSecond(ZoneOffset.UTC) * 1000;
+
+        long tomorrow = LocalDateTime.now().plusDays(1).toEpochSecond(ZoneOffset.UTC) * 1000;
+
+        return getAllBookingsBetween(today, tomorrow);
 
     }
+
+    @Scheduled(cron = "0 8 * * * *")
+    public void handleBookingsReminder() {
+
+    }
+
+
 }

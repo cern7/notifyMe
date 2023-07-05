@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -38,6 +39,9 @@ public class Booking {
 
     private String startDateTime;
     private String endDateTime;
+
+    @ColumnDefault(value = "false")
+    private boolean notified;
 
     @Enumerated(EnumType.STRING)
     private BookingStatus status;

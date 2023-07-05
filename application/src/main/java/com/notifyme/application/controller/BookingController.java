@@ -26,4 +26,15 @@ public class BookingController {
 
         return bookingService.getAllByCstId(token);
     }
+
+    @GetMapping("/all")
+    public ResponseEntity<?> getAllBookings() {
+        return bookingService.getAllBookings();
+    }
+
+
+    @GetMapping("/all/day")
+    public ResponseEntity<?> getAllBookingsBetween() {
+        return ResponseEntity.ok().body(bookingService.getAllBookingsToRemind());
+    }
 }
