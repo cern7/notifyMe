@@ -1,44 +1,42 @@
-package com.notifyme.application.events.registration.listener;
+package com.notifyme.application.events.listener.registration;
 
+import com.notifyme.application.dto.RegisterEventDTO;
+import com.notifyme.application.events.GenericEvent;
 
-import com.notifyme.application.events.registration.OnRegistrationCompleteEvent;
+import com.notifyme.application.service.email.EmailSender;
 import com.notifyme.application.model.User;
-import com.notifyme.application.events.registration.email.EmailSender;
 import com.notifyme.application.service.RegisterAuthenticationService;
-import org.jetbrains.annotations.NotNull;
-import org.springframework.context.ApplicationListener;
 import org.springframework.context.MessageSource;
+import org.springframework.context.event.EventListener;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Component;
 
 import java.util.UUID;
 
 @Component
-public class RegistrationListener implements ApplicationListener<OnRegistrationCompleteEvent> {
+public class GenericRegistrationListener {
     private final RegisterAuthenticationService registerService;
 
     private final MessageSource messages;
 
     private final EmailSender mailSender;
 
-
-    public RegistrationListener(RegisterAuthenticationService registerService,
-                                MessageSource messages,
-                                EmailSender mailSender) {
+    public GenericRegistrationListener(RegisterAuthenticationService registerService,
+                                       MessageSource messages,
+                                       EmailSender mailSender) {
         this.registerService = registerService;
         this.messages = messages;
         this.mailSender = mailSender;
     }
 
-
-    @Override
-    public void onApplicationEvent(@NotNull final OnRegistrationCompleteEvent event) {
+    @EventListener
+    public void handle(final GenericEvent<RegisterEventDTO> event) {
         this.confirmRegistration(event);
     }
 
 
-    public void confirmRegistration(final OnRegistrationCompleteEvent event) {
-        final User user = event.getUser();
+    public void confirmRegistration(final GenericEvent<RegisterEventDTO> event) {
+        final User user = event.getType().getUser();
         final String token = UUID.randomUUID().toString();
         registerService.createVerificationTokenForUser(user, token);
 
@@ -46,7 +44,7 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
         mailSender.send(email);
     }
 
-    private final SimpleMailMessage constructEmailMessage(final OnRegistrationCompleteEvent event,
+    private final SimpleMailMessage constructEmailMessage(final GenericEvent<RegisterEventDTO> event,
                                                           final User user,
                                                           final String token) {
         final String recipientAddress = user.getEmailAddress();
@@ -56,7 +54,7 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
                 null,
                 "You registered successfully. To confirm your " +
                         "registration, please click on the below link.",
-                event.getLocale());
+                event.getType().getLocale());
         final SimpleMailMessage email = new SimpleMailMessage();
         email.setTo(recipientAddress);
         email.setSubject(subject);

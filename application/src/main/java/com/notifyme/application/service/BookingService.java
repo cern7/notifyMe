@@ -3,6 +3,8 @@ package com.notifyme.application.service;
 import com.notifyme.application.dto.BookingRequest;
 import com.notifyme.application.dto.BookingResponse;
 import com.notifyme.application.dto.ReminderDTO;
+//import com.notifyme.application.events.GenericEvent;
+//import com.notifyme.application.events.reminder.listener.ReminderEvent;
 import com.notifyme.application.events.GenericEvent;
 import com.notifyme.application.model.*;
 import com.notifyme.application.repository.BookingRepository;
@@ -147,6 +149,7 @@ public class BookingService {
     }
 
 
+    @Transactional
     public void updateBookingStatus(final Long bookingId, final boolean isNotified) {
         if (bookingRepository.findById(bookingId).isPresent()) {
             bookingRepository.updateNotifiedByBookingIID(bookingId, isNotified);
@@ -160,16 +163,20 @@ public class BookingService {
     private boolean publishEvent(Booking booking) {
         Date startDate = new Date(booking.getStartDateTime());
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-        dateFormat.setTimeZone(TimeZone.getTimeZone("UTC")); // TO DO : update this to format to local time zone not UTC
+        dateFormat.setTimeZone(TimeZone.getDefault());
         String formattedStartDate = dateFormat.format(startDate);
 
         try {
-            eventPublisher.publishEvent(
-                    new GenericEvent<>(this,
-                            new ReminderDTO(booking.getCustomer().getUser().getEmailAddress(),
-                                    booking.getCustomer().getUser().getFirstName(),
-                                    formattedStartDate,
-                                    booking.getIID())));
+            ReminderDTO reminderDTO = new ReminderDTO(
+                    booking.getCustomer().getUser().getEmailAddress(),
+                    booking.getCustomer().getUser().getFirstName(),
+                    formattedStartDate,
+                    booking.getIID());
+            GenericEvent<ReminderDTO> reminderEvent =
+                    new GenericEvent<>(reminderDTO);
+
+            eventPublisher.publishEvent(reminderEvent);
+
             return true;
         } catch (RuntimeException e) {
             throw new RuntimeException("Couldn't send a reminder email");
@@ -178,7 +185,7 @@ public class BookingService {
 
     // "0 25 8 * * *"
     // 2023-07-08T08:25
-    @Scheduled(cron = "0 33 15 * * *")
+    @Scheduled(cron = "0 49 18 * * *")
     public void handleBookingsReminder() {
         LOGGER.warn("Scheduled job start process.....");
         List<Booking> bookingsToRemind = getAllBookingsToRemind();

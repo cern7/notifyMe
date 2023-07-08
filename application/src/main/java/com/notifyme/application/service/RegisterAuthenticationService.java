@@ -1,11 +1,8 @@
 package com.notifyme.application.service;
 
-import com.notifyme.application.dto.AuthenticationRequest;
-import com.notifyme.application.dto.AuthenticationResponse;
-import com.notifyme.application.dto.UserDTO;
-import com.notifyme.application.dto.UserRegisterRequest;
+import com.notifyme.application.dto.*;
+import com.notifyme.application.events.GenericEvent;
 import com.notifyme.application.model.*;
-import com.notifyme.application.events.registration.OnRegistrationCompleteEvent;
 import com.notifyme.application.repository.*;
 import com.notifyme.application.security.UserDetailsImpl;
 import lombok.extern.slf4j.Slf4j;
@@ -105,8 +102,8 @@ public class RegisterAuthenticationService {
     private boolean publishEvent(User user, HttpServletRequest request) {
         try {
             String appUrl = request.getContextPath();// appUrl is empty???
-            eventPublisher.publishEvent(new OnRegistrationCompleteEvent(
-                    user, request.getLocale(), appUrl));
+            eventPublisher.publishEvent(new GenericEvent<>(
+                    new RegisterEventDTO(user, request.getLocale(), appUrl)));
             return true;
         } catch (RuntimeException e) {
             throw new RuntimeException("Send email not published");

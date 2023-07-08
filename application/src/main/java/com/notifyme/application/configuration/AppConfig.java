@@ -9,7 +9,7 @@ import org.springframework.core.task.SimpleAsyncTaskExecutor;
 import org.springframework.scheduling.annotation.EnableAsync;
 
 @Configuration
-@ComponentScan("com.notifyme.application.events.reminder")
+@ComponentScan("com.notifyme.application.events")
 @EnableAsync
 public class AppConfig {
 

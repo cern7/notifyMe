@@ -1,4 +1,4 @@
-package com.notifyme.application.events.registration.email;
+package com.notifyme.application.service.email;
 
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
