@@ -66,7 +66,7 @@ public class SecurityConfig {
                 .and()
                 .authorizeRequests().antMatchers(HttpMethod.POST, "/api/service/addEmployeeToService/*").hasAnyAuthority("ADMIN")
                 .and()
-                .authorizeRequests().antMatchers(HttpMethod.GET, "/api/booking/all/").hasAnyAuthority("ADMIN")
+                .authorizeRequests().antMatchers(HttpMethod.GET, "/api/booking/all/*").hasAnyAuthority("ADMIN")
                 .and()
                 .authorizeRequests().antMatchers(HttpMethod.GET, "/api/booking/customer/all/*").hasAnyAuthority("CUSTOMER")
                 .anyRequest().authenticated()

@@ -4,6 +4,7 @@ import com.notifyme.application.model.Booking;
 import com.notifyme.application.model.Customer;
 import com.notifyme.application.model.Service;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 import javax.swing.text.html.Option;
@@ -19,7 +20,13 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
 
     List<Booking> getAllByStartDateTimeAfter(String today);
 
-    @Query(value = "select * from booking b where b.startdatetime >= ?1 and b.enddatetime <= ?2",
+    @Query(value = "select * from booking b where b.startdatetime > ?1 and b.enddatetime <= ?2 and notified = false",
             nativeQuery = true)
-    Optional<List<Booking>> getAllBetweenStartAndEndDate(String startDate, String endDate);
+    Optional<List<Booking>> getAllBetweenStartAndEndDate(Long startDate, Long endDate);
+
+    // inform Spring Data JPA this is an update operation
+    // and should return number of affected rows
+    @Modifying
+    @Query(value = "update booking set notified = ?2 where iid = ?1", nativeQuery = true)
+    void updateNotifiedByBookingIID(Long bookingId, boolean isNotified);
 }

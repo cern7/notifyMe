@@ -1,4 +1,4 @@
-package com.notifyme.application.registration;
+package com.notifyme.application.events.registration;
 
 import com.notifyme.application.model.User;
 import org.springframework.context.ApplicationEvent;

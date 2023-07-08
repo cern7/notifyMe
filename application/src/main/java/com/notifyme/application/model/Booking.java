@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -37,8 +38,10 @@ public class Booking {
     @JoinColumn(name = "service_id")
     private Service service;
 
-    private String startDateTime;
-    private String endDateTime;
+    @Column(columnDefinition = "BIGINT")
+    private Long startDateTime;
+    @Column(columnDefinition = "BIGINT")
+    private Long endDateTime;
 
     @ColumnDefault(value = "false")
     private boolean notified;
@@ -52,7 +55,7 @@ public class Booking {
     private String notes;
 
     public Booking(Customer customer, Employee employee, Service service,
-                   String startDateTime, String endDateTime, BookingStatus status,
+                   Long startDateTime, Long endDateTime, BookingStatus status,
                    PaymentStatus paymentStatus, String notes) {
         this.customer = customer;
         this.employee = employee;

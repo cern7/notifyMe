@@ -2,24 +2,26 @@ package com.notifyme.application.service;
 
 import com.notifyme.application.dto.BookingRequest;
 import com.notifyme.application.dto.BookingResponse;
+import com.notifyme.application.dto.ReminderDTO;
+import com.notifyme.application.events.GenericEvent;
 import com.notifyme.application.model.*;
 import com.notifyme.application.repository.BookingRepository;
 import com.notifyme.application.repository.CustomerRepository;
 import com.notifyme.application.repository.EmployeeRepository;
 import com.notifyme.application.repository.ServiceRepository;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.awt.print.Book;
-import java.lang.annotation.Repeatable;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @org.springframework.stereotype.Service
 public class BookingService {
@@ -29,17 +31,21 @@ public class BookingService {
     private final ServiceRepository serviceRepository;
     private final CustomerRepository customerRepository;
     private final JWTService jwtService;
+    private final ApplicationEventPublisher eventPublisher;
+    private final static Logger LOGGER = LoggerFactory.getLogger(BookingService.class);
 
     public BookingService(BookingRepository bookingRepository,
                           EmployeeRepository employeeRepository,
                           ServiceRepository serviceRepository,
                           CustomerRepository customerRepository,
-                          JWTService jwtService) {
+                          JWTService jwtService,
+                          ApplicationEventPublisher eventPublisher) {
         this.bookingRepository = bookingRepository;
         this.employeeRepository = employeeRepository;
         this.serviceRepository = serviceRepository;
         this.customerRepository = customerRepository;
         this.jwtService = jwtService;
+        this.eventPublisher = eventPublisher;
     }
 
     @Transactional
@@ -73,7 +79,7 @@ public class BookingService {
                         .orElse(null);
 
                 return ResponseEntity.ok().body(new BookingResponse(booking.getIID(),
-                        booking.getStartDateTime(), booking.getEndDateTime(),
+                        booking.getStartDateTime().toString(), booking.getEndDateTime().toString(),
                         booking.getStatus(), booking.getPaymentStatus(), booking.getNotes(),
                         booking.getEmployee().getIID(), customer.getIID(),
                         booking.getService()));
@@ -101,8 +107,8 @@ public class BookingService {
         List<Booking> customerBookings = bookingRepository.getAllByCustomer(customer);
         List<BookingResponse> responseBookings = new ArrayList<>(customerBookings.size());
         customerBookings.forEach(booking -> {
-            responseBookings.add(new BookingResponse(booking.getIID(), booking.getStartDateTime(),
-                    booking.getEndDateTime(), booking.getStatus(), booking.getPaymentStatus(),
+            responseBookings.add(new BookingResponse(booking.getIID(), booking.getStartDateTime().toString(),
+                    booking.getEndDateTime().toString(), booking.getStatus(), booking.getPaymentStatus(),
                     booking.getNotes(),
                     booking.getEmployee().getIID(), customerId,
                     booking.getService()));
@@ -127,7 +133,7 @@ public class BookingService {
             throw new IllegalArgumentException("Start date must be earlier than end date");
         }
 
-        return bookingRepository.getAllBetweenStartAndEndDate(startDate.toString(), endDate.toString())
+        return bookingRepository.getAllBetweenStartAndEndDate(startDate, endDate)
                 .orElse(null);
     }
 
@@ -138,12 +144,51 @@ public class BookingService {
         long tomorrow = LocalDateTime.now().plusDays(1).toEpochSecond(ZoneOffset.UTC) * 1000;
 
         return getAllBookingsBetween(today, tomorrow);
+    }
+
+
+    public void updateBookingStatus(final Long bookingId, final boolean isNotified) {
+        if (bookingRepository.findById(bookingId).isPresent()) {
+            bookingRepository.updateNotifiedByBookingIID(bookingId, isNotified);
+            LOGGER.info("++++++++Booking notified, flag updated++++++++");
+        } else {
+            LOGGER.warn("There is no booking with id: {}", bookingId);
+        }
 
     }
 
-    @Scheduled(cron = "0 8 * * * *")
-    public void handleBookingsReminder() {
+    private boolean publishEvent(Booking booking) {
+        Date startDate = new Date(booking.getStartDateTime());
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+        dateFormat.setTimeZone(TimeZone.getTimeZone("UTC")); // TO DO : update this to format to local time zone not UTC
+        String formattedStartDate = dateFormat.format(startDate);
 
+        try {
+            eventPublisher.publishEvent(
+                    new GenericEvent<>(this,
+                            new ReminderDTO(booking.getCustomer().getUser().getEmailAddress(),
+                                    booking.getCustomer().getUser().getFirstName(),
+                                    formattedStartDate,
+                                    booking.getIID())));
+            return true;
+        } catch (RuntimeException e) {
+            throw new RuntimeException("Couldn't send a reminder email");
+        }
+    }
+
+    // "0 25 8 * * *"
+    // 2023-07-08T08:25
+    @Scheduled(cron = "0 33 15 * * *")
+    public void handleBookingsReminder() {
+        LOGGER.warn("Scheduled job start process.....");
+        List<Booking> bookingsToRemind = getAllBookingsToRemind();
+        if (bookingsToRemind.isEmpty()) {
+            LOGGER.warn("No bookings to remind");
+        }
+        bookingsToRemind.forEach(booking -> {
+            publishEvent(booking);
+            LOGGER.warn("Reminder sent for booking: {}", booking.getIID());
+        });
     }
 
 

@@ -9,8 +9,8 @@ public class BookingRequest {
     public Long customerId;
     public Long employeeId;
     public Long serviceId;
-    public String startDateTime;
-    public String endDateTime;
+    public Long startDateTime;
+    public Long endDateTime;
     public String status;
     public String paymentStatus;
     public String notes;

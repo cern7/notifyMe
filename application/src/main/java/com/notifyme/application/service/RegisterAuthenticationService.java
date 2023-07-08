@@ -5,7 +5,7 @@ import com.notifyme.application.dto.AuthenticationResponse;
 import com.notifyme.application.dto.UserDTO;
 import com.notifyme.application.dto.UserRegisterRequest;
 import com.notifyme.application.model.*;
-import com.notifyme.application.registration.OnRegistrationCompleteEvent;
+import com.notifyme.application.events.registration.OnRegistrationCompleteEvent;
 import com.notifyme.application.repository.*;
 import com.notifyme.application.security.UserDetailsImpl;
 import lombok.extern.slf4j.Slf4j;
@@ -113,7 +113,8 @@ public class RegisterAuthenticationService {
         }
     }
 
-    private void saveUserBasedOnType(Long userId, User user, String userType) {
+    @Transactional
+    public void saveUserBasedOnType(Long userId, User user, String userType) {
         switch (userType) {
             case "CUSTOMER" -> {
                 Customer userCustomer = new Customer(userId);
@@ -167,9 +168,10 @@ public class RegisterAuthenticationService {
                                 userDetails.getLastName(),
                                 userDetails.getEmailAddress(),
                                 userDetails.getPhoneNumber(),
-                                userDetails.getType().toString())));
+                                userDetails.getType())));
     }
 
+    @Transactional
     public void createVerificationTokenForUser(final User user, final String token) {
         final VerificationToken myToken = new VerificationToken(token, user);
         tokenRepository.save(myToken);
