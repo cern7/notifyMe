@@ -1,4 +1,4 @@
-# NotifyMe 
+# NotifyMe Web App
 ## Database UML Diagram
 ---
 ```mermaid
@@ -9,8 +9,8 @@ USER ||--|| EMPLOYEE : is
 SERVICE }o--|| BOOKING : has
 EMPLOYEE }o--|| BOOKING : has
 CUSTOMER }o--|| BOOKING : has
-SERVICE ||--|{ EMPLOYEE_SERVICE : "is provided"
-EMPLOYEE ||--|{ EMPLOYEE_SERVICE : provides
+SERVICE ||--|{ EMPLOYEE_TO_SERVICE : "is provided"
+EMPLOYEE ||--|{ EMPLOYEE_TO_SERVICE : provides
 
 USER {
     IID int8 PK
@@ -19,6 +19,7 @@ USER {
     EMAILADDRESS VARCHAR
 	  PHONENUMBER VARCHAR
 	  STATUS VARCHAR
+    USERTYPE VARCHAR
 	  GEOGRAPHICADDRESS VARCHAR
 	  CREATIONDATETIME VARCHAR
 	  LASTLOGINDATETIME VARCHAR
@@ -45,23 +46,24 @@ USER {
 	  CUSTOMER_ID int8 FK
 	  EMPLOYEE_ID int8 FK
 	  SERVICE_ID int8 FK
-	  STARTDATETIME VARCHAR 
-	  ENDDATETIME VARCHAR 
+	  STARTDATETIME int8 
+	  ENDDATETIME int8
+    NOTIFIED BOOLEAN
 	  STATUS VARCHAR
 	  PAYMENTSTATUS VARCHAR 
-	  NOTES teVARCHARxt
+	  NOTES VARCHAR
   }
   SERVICE {
     IID int8 PK
-	  NAME VARCHAR
+	  SERVICENAME VARCHAR
 	  DESCRIPTION VARCHAR
 	  PRICE VARCHAR 
 	  DURATION VARCHAR 
-	  AVAILABILITY BOOL
+	  AVAILABILITY BOOLEAN
 	  CATEGORY VARCHAR 
 	  IMAGEURL VARCHAR 
 	 }
-  EMPLOYEE_SERVICE {
+  EMPLOYEE_TO_SERVICE {
     EMPLOYEE_ID int8 PK,FK
 	  SERVICE_ID int8 PK,FK
   }
@@ -77,8 +79,7 @@ USER {
  'CUSTOMER \- BOOKING : has '                 | \(Customer has zero / more bookings\) \(Booking has exactly one customer\)                   
  'EMPLOYEE \- BOOKING : has '                 | \(EMPLOYEE has zero / more bookings\) \(Booking has exactly one employee\)                   
  'SERVICE \- BOOKING : has'                   | \(SERVICE has zero / more bookings\) \(Booking has exactly one service\)                     
- 'REMINDER \- BOOKING : is for / has'         | REMINDER is exactly for one BOOKING\) \(BOOKING has exactly one REMINDER\)                   
- 'SERVICE \- EMPLOYEE\_SERVICE : is provided' | \(Exactly one service is provided by one ore more Employees\) \(Employee \)                  
- 'EMPLOYEE \- EMPLOYEE\_SERVICE : provides'   | \(Exactly one employee provides one or more Service\)                                        
+ 'SERVICE \- EMPLOYEE\_TO\_SERVICE : is provided' | \(Exactly one service is provided by one ore more Employees\) \(Employee \)                  
+ 'EMPLOYEE \- EMPLOYEE\_TO\_SERVICE : provides'   | \(Exactly one employee provides one or more Service\)                                        
 
 
