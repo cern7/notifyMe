@@ -1,11 +1,8 @@
 package com.notifyme.application.controller;
 
-import com.notifyme.application.dto.BookingResponse;
-import com.notifyme.application.repository.BookingRepository;
 import com.notifyme.application.service.BookingService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -24,7 +21,7 @@ public class BookingController {
     public ResponseEntity<?> getAllByCustomerId(@RequestHeader HttpHeaders headers) {
         String token = headers.getFirst(HttpHeaders.AUTHORIZATION);
 
-        return bookingService.getAllByCstId(token);
+        return bookingService.getAllByUsrId(token);
     }
 
     @GetMapping("/all")

@@ -44,6 +44,7 @@ function App() {
         <Route path='/home' element={<HomeComponent />} />
         <Route path='/service' element={<ServiceComponent />} />
         <Route path='/bookings/all' element={<MyBookings />} />
+        <Route path='/bookings' element={<MyBookings />} />
         <Route path='/booking' element={<BookingComponent />} />
       </Routes>
 

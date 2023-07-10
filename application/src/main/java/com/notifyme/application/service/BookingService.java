@@ -2,6 +2,7 @@ package com.notifyme.application.service;
 
 import com.notifyme.application.dto.BookingRequest;
 import com.notifyme.application.dto.BookingResponse;
+import com.notifyme.application.dto.BookingResponseMapper;
 import com.notifyme.application.dto.ReminderDTO;
 //import com.notifyme.application.events.GenericEvent;
 //import com.notifyme.application.events.reminder.listener.ReminderEvent;
@@ -35,19 +36,22 @@ public class BookingService {
     private final JWTService jwtService;
     private final ApplicationEventPublisher eventPublisher;
     private final static Logger LOGGER = LoggerFactory.getLogger(BookingService.class);
+    private final BookingResponseMapper bookingMapper;
 
     public BookingService(BookingRepository bookingRepository,
                           EmployeeRepository employeeRepository,
                           ServiceRepository serviceRepository,
                           CustomerRepository customerRepository,
                           JWTService jwtService,
-                          ApplicationEventPublisher eventPublisher) {
+                          ApplicationEventPublisher eventPublisher,
+                          BookingResponseMapper bookingMapper) {
         this.bookingRepository = bookingRepository;
         this.employeeRepository = employeeRepository;
         this.serviceRepository = serviceRepository;
         this.customerRepository = customerRepository;
         this.jwtService = jwtService;
         this.eventPublisher = eventPublisher;
+        this.bookingMapper = bookingMapper;
     }
 
     @Transactional
@@ -94,35 +98,52 @@ public class BookingService {
 
     }
 
-    public ResponseEntity<?> getAllByCstId(String token) {
-        Long customerId = jwtService.getUserIdFromToken(token);
-        if (customerId == null) {
-            return ResponseEntity.badRequest().body("Invalid customerId");
+
+    public ResponseEntity<?> getAllByUsrId(String token) {
+        Long userId = jwtService.getUserId(token);
+        String userType = jwtService.getUserType(token);
+        if (userId == null) {
+            return ResponseEntity.badRequest().body("Invalid userId");
+        }
+        Customer customer;
+        Employee employee;
+        List<Booking> userBookings;
+        switch (userType) {
+            case "CUSTOMER" -> {
+                customer = customerRepository.findById(userId).orElse(null);
+                if (customer == null) {
+                    return ResponseEntity.badRequest().body("Invalid userId");
+                }
+                userBookings = bookingRepository.getAllByCustomer(customer);
+            }
+            case "EMPLOYEE" -> {
+                employee = employeeRepository.findById(userId).orElse(null);
+                if (employee == null) {
+                    return ResponseEntity.badRequest().body("Invalid userId");
+                }
+                userBookings = bookingRepository.getAllByEmployee(employee);
+            }
+            default -> {
+                LOGGER.warn("No user Type provided");
+                return ResponseEntity.badRequest().body("No user Type provided");
+            }
         }
 
-        Customer customer = customerRepository.findById(customerId).orElse(null);
-
-        if (customer == null) {
-            return ResponseEntity.badRequest().body("Invalid customerId");
-        }
-
-        List<Booking> customerBookings = bookingRepository.getAllByCustomer(customer);
-        List<BookingResponse> responseBookings = new ArrayList<>(customerBookings.size());
-        customerBookings.forEach(booking -> {
-            responseBookings.add(new BookingResponse(booking.getIID(), booking.getStartDateTime().toString(),
-                    booking.getEndDateTime().toString(), booking.getStatus(), booking.getPaymentStatus(),
-                    booking.getNotes(),
-                    booking.getEmployee().getIID(), customerId,
-                    booking.getService()));
+        List<BookingResponse> responseBookings = new ArrayList<>(userBookings.size());
+        userBookings.forEach(booking -> {
+            responseBookings.add(bookingMapper.apply(booking));
         });
-
         return ResponseEntity.ok(responseBookings);
     }
 
     public ResponseEntity<?> getAllBookings() {
         Long today = System.currentTimeMillis();
         List<Booking> allBookings = bookingRepository.getAllByStartDateTimeAfter(today);
-        return ResponseEntity.ok(allBookings);
+        List<BookingResponse> responseBookings = new ArrayList<>(allBookings.size());
+        allBookings.forEach(booking -> {
+            responseBookings.add(bookingMapper.apply(booking));
+        });
+        return ResponseEntity.ok(responseBookings);
     }
 
     private List<Booking> getAllBookingsBetween(Long startDate, Long endDate) {

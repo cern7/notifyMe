@@ -20,7 +20,9 @@ export const loadBookings = (bookingResponseDTO) => {
         category: bookingResponseDTO.service.category,
         imageUrl: bookingResponseDTO.service.imageUrl,
         iid: bookingResponseDTO.service.iid,
-      }
+      },
+      customerId: bookingResponseDTO.customerId,
+      employeeId: bookingResponseDTO.employeeId
     }
   }
 }

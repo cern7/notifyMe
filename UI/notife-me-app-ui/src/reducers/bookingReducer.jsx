@@ -31,7 +31,9 @@ function bookingReducer(state = initialState, action) {
                 category: action.payload.service.category,
                 imageUrl: action.payload.service.imageUrl,
                 iid: action.payload.service.iid,
-              }
+              },
+              customerId: action.payload.customerId,
+              employeeId: action.payload.employeeId
             }
           ]
         }

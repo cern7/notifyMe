@@ -9,14 +9,15 @@ const HomeComponent = () => {
   const userType = localStorage.getItem('userType');
 
   const cookieToken = Cookies.get('jwtToken');
+  const cookieLocalStorage = localStorage.getItem('token');
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   return (
     <div>
-      {cookieToken ? (
+      {cookieLocalStorage ? (
         <h1>Welcome to home page</h1>
-             ) : (
+      ) : (
         <div>
           <h2>Go to login page</h2>
           <Link to='/login'>Login</Link>

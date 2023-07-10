@@ -17,7 +17,8 @@ import 'react-clock/dist/Clock.css';
 
 const ServiceComponent = () => {
   const dispatch = useDispatch();
-  const userToken = Cookies.get('jwtToken');
+  // const userToken = Cookies.get('jwtToken');
+  const userToken = localStorage.getItem('token');
   const [data, setData] = useState([]);
   const storeServices = useSelector((state) => state.services.services);
   const [showCalendar, setShowCalendar] = useState(false);
@@ -39,6 +40,12 @@ const ServiceComponent = () => {
           const response = await getAllAvailServices();
           setData(response.data);
         } catch (error) {
+          console.log("LOCALSTORAGE:")
+          console.log(localStorage.getItem('token'));
+          // localStorage.removeItem('token');
+          // localStorage.removeItem('userId')
+          // localStorage.removeItem('userType')
+          // navigate('/login');
           console.error(error);
         }
       };

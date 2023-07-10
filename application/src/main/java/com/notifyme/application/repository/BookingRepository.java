@@ -2,6 +2,7 @@ package com.notifyme.application.repository;
 
 import com.notifyme.application.model.Booking;
 import com.notifyme.application.model.Customer;
+import com.notifyme.application.model.Employee;
 import com.notifyme.application.model.Service;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -17,6 +18,8 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
     Optional<Booking> findByCustomerAndService(Customer customer, Service service);
 
     List<Booking> getAllByCustomer(Customer customer);
+
+    List<Booking> getAllByEmployee(Employee employee);
 
     List<Booking> getAllByStartDateTimeAfter(Long today);
 

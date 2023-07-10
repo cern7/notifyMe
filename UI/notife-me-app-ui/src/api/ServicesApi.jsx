@@ -8,7 +8,7 @@ import Cookies from 'js-cookie';
 const config = {
   headers: {
     'Content-type': 'application/json; charset=UTF-8',
-    'Authorization': Cookies.get('jwtToken')
+    'Authorization': localStorage.getItem('token')
   },
 };
 

@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { getAllCustomerBookings } from '../api/BookingApi';
+import { getAllCustomerBookings, getAllBookings } from '../api/BookingApi';
 import Cookies from 'js-cookie';
 import { loadBookings } from '../actions/myBookings';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Tab } from '@mui/material';
 
 const MyBookings = () => {
   const id = localStorage.getItem('userId');
-  const userToken = Cookies.get('jwtToken');
+  // const userToken = Cookies.get('jwtToken');
+  const userToken = localStorage.getItem('token');
   const userType = localStorage.getItem('userType')
   const dispatch = useDispatch();
   const [data, setData] = useState([]);
@@ -19,10 +20,30 @@ const MyBookings = () => {
     if (storeBookings.length === 0) {
       const fetchData = async () => {
         try {
-          const response = await getAllCustomerBookings();
+          let response
+          if (userType === 'CUSTOMER') {
+            response = await getAllCustomerBookings();
+          } else if (userType === 'ADMIN') {
+            // load all bookings
+            response = await getAllBookings();
+          }
+          else if (userType === 'EMPLOYEE') {
+            // load all bookings of the employee
+            // TO DO rename this function as in backend it is calling the same method
+            response = await getAllCustomerBookings();
+          }
+
           console.log(response.data);
           setData(response.data);
         } catch (error) {
+          // if (error.response.status === 401 || error.response.status === 400) {
+          //   window.location.reload(true);
+          //   localStorage.removeItem('token');
+          //   localStorage.removeItem('userType');
+          //   localStorage.removeItem('userId');
+          //   navigate('/login')
+          // }
+          console.error(error);
           console.error("Couldn't call backend api loading bookings", error)
         }
       }
@@ -33,7 +54,6 @@ const MyBookings = () => {
   useEffect(() => {
     if (data.length > 0) {
       loadBookingsToStore();
-      console.log("loading data into store")
     }
   }, [data]);
 
@@ -46,13 +66,12 @@ const MyBookings = () => {
 
   return (
     <div>
-      {(userType === 'ADMIN') &&
+      {/* {(userType === 'ADMIN') &&
         <div>will call all bookings in the app for all customers</div>}
       {(userType === 'EMPLOYEE') &&
-        <div>will call all bookings for this employee</div>}
-      {(userType === 'CUSTOMER') &&
+        <div>will call all bookings for this employee</div>} */}
+      {userToken &&
         <div>
-          <h5>will call all bookings for this Customer</h5>
           <div>
             {userToken && <TableContainer component={Paper}>
               <Table>
@@ -64,10 +83,15 @@ const MyBookings = () => {
                     <TableCell>Payment Status</TableCell>
                     <TableCell>Notes</TableCell>
                     <TableCell>Service Name</TableCell>
+                    {(userType === 'ADMIN' || userType === 'EMPLOYEE')
+                      && < TableCell >Customer ID</TableCell>}
+                    {(userType === 'ADMIN') &&
+                      <TableCell>Employee ID</TableCell>}
                   </TableRow>
                 </TableHead>
                 <TableBody>
                   {storeBookings.length > 0 && storeBookings.map((booking, index) => {
+
                     return (<TableRow key={index}>
                       <TableCell>{index + 1}</TableCell>
                       <TableCell>{new Date(Number(booking.startDateTime)).toLocaleString('en-US',
@@ -84,6 +108,10 @@ const MyBookings = () => {
                       <TableCell>{booking.paymentStatus}</TableCell>
                       <TableCell>{booking.notes}</TableCell>
                       <TableCell>{booking.service.serviceName}</TableCell>
+                      {(userType === 'ADMIN' || userType === 'EMPLOYEE')
+                        && <TableCell>{booking.customerId}</TableCell>}
+                      {userType === 'ADMIN' &&
+                        <TableCell>{booking.employeeId}</TableCell>}
                     </TableRow>
                     )
                   })}
@@ -94,7 +122,7 @@ const MyBookings = () => {
           </div>
         </div>
       }
-    </div>
+    </div >
   )
 }
 

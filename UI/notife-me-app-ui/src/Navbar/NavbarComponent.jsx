@@ -23,7 +23,8 @@ const NavbarComponent = () => {
   const id = localStorage.getItem('userId')
   const userType = localStorage.getItem('userType');
 
-  const cookieToken = Cookies.get('jwtToken');
+  // const cookieToken = Cookies.get('jwtToken');
+  const cookieToken = localStorage.getItem('token');
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -49,7 +50,8 @@ const NavbarComponent = () => {
 
   const handleLogout = () => {
     if (cookieToken) {
-      Cookies.remove('jwtToken', { sameSite: 'strict' });
+      // Cookies.remove('jwtToken', { sameSite: 'strict' });
+      localStorage.removeItem('token');
       localStorage.removeItem('userId')
       localStorage.removeItem('userType')
       navigate('/home')
@@ -84,7 +86,8 @@ const NavbarComponent = () => {
             <span style={{ fontFamily: 'Arial', fontWeight: 'bold' }}>NotifyMe</span>
           </Typography>
           <Box sx={{ typography: 'h6', fontFamily: 'Times New Roman' }}>
-            {(userType === 'ADMIN') && (<IconButton aria-label='button' color='inherit' onClick={handleAdminAllBookings}>
+            {(userType === 'ADMIN') 
+            && (<IconButton aria-label='button' color='inherit' onClick={handleAdminAllBookings}>
               <span>All Bookings(admin)</span>
             </IconButton>)}
             {(userType === 'EMPLOYEE') && (<IconButton aria-label='button' color='inherit' onClick={handleEmployeeBookings}>

@@ -1,13 +1,13 @@
 package com.notifyme.application.service;
 
 import com.notifyme.application.model.User;
+import com.notifyme.application.model.UserType;
 import com.notifyme.application.security.UserDetailsImpl;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.SignatureException;
 import io.jsonwebtoken.impl.DefaultClaims;
-import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Component;
@@ -68,7 +68,7 @@ public class JWTService {
                 .getSubject();
     }
 
-    public Long getUserIdFromToken(String token) {
+    public Long getUserId(String token) {
         Claims claims = new DefaultClaims();
         try {
             claims = Jwts.parser().setSigningKey(jwtSecret)
@@ -78,5 +78,16 @@ public class JWTService {
         }
 
         return Long.valueOf(claims.get("userId").toString());
+    }
+
+    public String getUserType(String token) {
+        Claims claims = new DefaultClaims();
+        try {
+            claims = Jwts.parser().setSigningKey(jwtSecret)
+                    .parseClaimsJws(token).getBody();
+        } catch (SignatureException e) {
+            log.error("Something went wrong parsing token extracting UserID: {}", e.getMessage());
+        }
+        return claims.get("userType").toString();
     }
 }

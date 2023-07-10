@@ -22,10 +22,11 @@ const Login = () => {
       const response = await loginRequest(userDTO);
       // save userToken in cookies
       const token = response.data.token;
-      Cookies.set('jwtToken', token, { sameSite: 'strict' });
+      // Cookies.set('jwtToken', token, { sameSite: 'strict' });
       // save userData to localStorage
       localStorage.setItem('userId', response.data.userDetails.iid)
       localStorage.setItem('userType', response.data.userDetails.type)
+      localStorage.setItem('token', token);
       setUsername('');
       setPassword('');
       navigate('/home');
