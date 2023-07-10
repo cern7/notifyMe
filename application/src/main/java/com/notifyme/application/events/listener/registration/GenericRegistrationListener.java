@@ -10,6 +10,7 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.event.EventListener;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
@@ -35,18 +36,17 @@ public class GenericRegistrationListener {
     }
 
 
-    public void confirmRegistration(final GenericEvent<RegisterEventDTO> event) {
+    synchronized public void confirmRegistration(final GenericEvent<RegisterEventDTO> event) {
         final User user = event.getType().getUser();
         final String token = UUID.randomUUID().toString();
         registerService.createVerificationTokenForUser(user, token);
-
         final SimpleMailMessage email = constructEmailMessage(event, user, token);
         mailSender.send(email);
     }
 
-    private final SimpleMailMessage constructEmailMessage(final GenericEvent<RegisterEventDTO> event,
-                                                          final User user,
-                                                          final String token) {
+    private SimpleMailMessage constructEmailMessage(final GenericEvent<RegisterEventDTO> event,
+                                                    final User user,
+                                                    final String token) {
         final String recipientAddress = user.getEmailAddress();
         final String subject = "Registration Confirmation";
         final String confirmationUrl = "http://localhost:5173/register/confirmEmail/" + token;

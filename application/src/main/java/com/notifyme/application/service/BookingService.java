@@ -120,7 +120,7 @@ public class BookingService {
     }
 
     public ResponseEntity<?> getAllBookings() {
-        String today = String.valueOf(System.currentTimeMillis());
+        Long today = System.currentTimeMillis();
         List<Booking> allBookings = bookingRepository.getAllByStartDateTimeAfter(today);
         return ResponseEntity.ok(allBookings);
     }
@@ -185,7 +185,7 @@ public class BookingService {
 
     // "0 25 8 * * *"
     // 2023-07-08T08:25
-    @Scheduled(cron = "0 49 18 * * *")
+    @Scheduled(cron = "0 0 8 * * *")
     public void handleBookingsReminder() {
         LOGGER.warn("Scheduled job start process.....");
         List<Booking> bookingsToRemind = getAllBookingsToRemind();

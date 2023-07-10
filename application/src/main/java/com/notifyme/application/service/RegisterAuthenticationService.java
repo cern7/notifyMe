@@ -23,6 +23,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -60,7 +61,7 @@ public class RegisterAuthenticationService {
 
     @Transactional
     public ResponseEntity<?> registerNewCustomer(UserRegisterRequest registerRequest,
-                                                 HttpServletRequest request) {
+                                                              HttpServletRequest request) {
         if (userRepository.existsByEmailAddress(registerRequest.getEmail())) {
             return ResponseEntity.badRequest().body("Email used");
         }
@@ -88,10 +89,12 @@ public class RegisterAuthenticationService {
                 null,
                 passwordEncoder.encode(registerRequest.getPassword()));
 
+        // 1. save user in usertbl
         userRepository.save(user);
 
         Long iid = userRepository.getUserByEmailAddress(registerRequest.getEmail()).getIID();
 
+        // 2. save user in user type specific table (customer, employee, admin)
         saveUserBasedOnType(iid, user, type.toUpperCase(Locale.ROOT));
 
         publishEvent(user, request);
@@ -168,14 +171,22 @@ public class RegisterAuthenticationService {
                                 userDetails.getType())));
     }
 
+
     @Transactional
-    public void createVerificationTokenForUser(final User user, final String token) {
+    public synchronized void createVerificationTokenForUser(final User user, final String token) {
         final VerificationToken myToken = new VerificationToken(token, user);
         tokenRepository.save(myToken);
     }
 
     public VerificationToken getVerificationToken(final String verificationToken) {
         return tokenRepository.findByToken(verificationToken);
+    }
+
+    public String getVerificationToken(final User user) {
+        if (user == null) {
+            return "User doesn't exist";
+        }
+        return tokenRepository.findByUserId(user.getIID()).orElse(null);
     }
 
     public String validateVerificationToken(String token) {
@@ -203,4 +214,5 @@ public class RegisterAuthenticationService {
         }
         return null;
     }
+
 }

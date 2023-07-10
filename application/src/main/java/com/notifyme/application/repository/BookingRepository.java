@@ -18,7 +18,7 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
 
     List<Booking> getAllByCustomer(Customer customer);
 
-    List<Booking> getAllByStartDateTimeAfter(String today);
+    List<Booking> getAllByStartDateTimeAfter(Long today);
 
     @Query(value = "select * from booking b where b.startdatetime > ?1 and b.enddatetime <= ?2 and notified = false",
             nativeQuery = true)
