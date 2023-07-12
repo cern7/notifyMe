@@ -1,6 +1,13 @@
 # NotifyMe Web App
-## Database UML Diagram
----
+## About
+This project is about building a java application for small businesses that require both booking and reminder functionality for their business to run efficiently and satisfy the customer needs.
+
+This is a Java Spring application that is connected to a PostgreSQL database and has a frontend client created in React.js
+
+## Problem Statement
+
+
+## UML Diagram
 ```mermaid
 erDiagram
 USER |o--|| CUSTOMER : is
@@ -70,16 +77,8 @@ USER {
 
  ```
 
+## Functionality
 
- Relation                                     | Description                                                                                  
-:--------------------------------------------:|:--------------------------------------------------------------------------------------------:
- 'USER \- CUSTOMER : is'                      | \(zero/one user can be customer\) \(one and only one customer can be a user\) \+ solid line  
- 'USER \- ADMIN : is'                         | \(exactly one user is admin and viceversa\)                                                  
- 'USER \- EMPLOYEE : is'                      | \(exactly one user is employee and viceversa\)                                               
- 'CUSTOMER \- BOOKING : has '                 | \(Customer has zero / more bookings\) \(Booking has exactly one customer\)                   
- 'EMPLOYEE \- BOOKING : has '                 | \(EMPLOYEE has zero / more bookings\) \(Booking has exactly one employee\)                   
- 'SERVICE \- BOOKING : has'                   | \(SERVICE has zero / more bookings\) \(Booking has exactly one service\)                     
- 'SERVICE \- EMPLOYEE\_TO\_SERVICE : is provided' | \(Exactly one service is provided by one ore more Employees\) \(Employee \)                  
- 'EMPLOYEE \- EMPLOYEE\_TO\_SERVICE : provides'   | \(Exactly one employee provides one or more Service\)                                        
+
 
 
