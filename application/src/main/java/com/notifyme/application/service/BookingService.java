@@ -206,7 +206,7 @@ public class BookingService {
 
     // "0 25 8 * * *"
     // 2023-07-08T08:25
-    @Scheduled(cron = "0 0 8 * * *")
+    @Scheduled(cron = "0 40 19 * * *")
     public void handleBookingsReminder() {
         LOGGER.warn("Scheduled job start process.....");
         List<Booking> bookingsToRemind = getAllBookingsToRemind();

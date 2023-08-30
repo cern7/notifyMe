@@ -28,7 +28,7 @@ public class Employee {
     @OneToMany(mappedBy = "employee")
     private Set<Booking> bookings;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     @JoinTable(name = "employee_to_service",
             joinColumns = @JoinColumn(name = "employee_id"),
             inverseJoinColumns = @JoinColumn(name = "service_id"))
