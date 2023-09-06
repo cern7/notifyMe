@@ -2,6 +2,7 @@ package com.notifyme.application.controller;
 
 import com.notifyme.application.dto.AuthenticationRequest;
 import com.notifyme.application.dto.UserRegisterRequest;
+import com.notifyme.application.model.TokenStatus;
 import com.notifyme.application.service.RegisterAuthenticationService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,16 +36,15 @@ public class RegisterAuthenticationController {
 
     @PostMapping("/registrationConfirm")
     public ResponseEntity<?> confirmRegistration(WebRequest request,
-                                                 Model model,
                                                  @RequestParam("token") String token) {
         Locale locale = request.getLocale();
 
         final String result = registerAuthenticationService.validateVerificationToken(token);
-        if (result.equals("TOKEN VALID")) {
+        if (result.equals(TokenStatus.VALIDTOKEN.value())) {
             return ResponseEntity.ok("Email confirmed"); // REDIRECT TO LOGIN
 //            return "redirect:/login.html?lang=" + locale.getLanguage();
-        } else if (result.equals("TOKEN INVALID")
-                || result.equals("TOKEN EXPIRED")) {
+        } else if (result.equals(TokenStatus.INVALIDTOKEN.value())
+                || result.equals(TokenStatus.EXPIREDTOKEN.value())) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("INVALID TOKEN");
             // REDIRECT TO WHAT??????
 //            return "redirect:/badUser.html?lang=" + locale.getLanguage();

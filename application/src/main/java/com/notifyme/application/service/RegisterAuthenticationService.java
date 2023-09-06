@@ -61,7 +61,7 @@ public class RegisterAuthenticationService {
 
     @Transactional
     public ResponseEntity<?> registerNewCustomer(UserRegisterRequest registerRequest,
-                                                              HttpServletRequest request) {
+                                                 HttpServletRequest request) {
         if (userRepository.existsByEmailAddress(registerRequest.getEmail())) {
             return ResponseEntity.badRequest().body("Email used");
         }
@@ -192,7 +192,7 @@ public class RegisterAuthenticationService {
     public String validateVerificationToken(String token) {
         final VerificationToken verificationToken = tokenRepository.findByToken(token);
         if (verificationToken == null) {
-            return "TOKEN INVALID";
+            return TokenStatus.INVALIDTOKEN.value();
         }
 
         final User user = verificationToken.getUser();
@@ -200,11 +200,15 @@ public class RegisterAuthenticationService {
         if ((verificationToken.getExpiryDate()
                 .getTime() - cal.getTime().getTime()) <= 0) {
             tokenRepository.delete(verificationToken);
-            return "TOKEN EXPIRED";
+            // TODO:
+            // delete the token from the repo if expired
+            return TokenStatus.EXPIREDTOKEN.value();
         }
         user.setStatus(UserStatus.ACTIVE);
         userRepository.save(user);
-        return "TOKEN VALID";
+        // TODO:
+        // delete the token from the repo if confirmed
+        return TokenStatus.VALIDTOKEN.value();
     }
 
     public User getUser(final String verificationToken) {

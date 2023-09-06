@@ -107,13 +107,8 @@ public class VerificationToken {
             return false;
         }
         if (getUser() == null) {
-            if (other.getUser() != null) {
-                return false;
-            }
-        } else if (!getUser().equals(other.getUser())) {
-            return false;
-        }
-        return true;
+            return other.getUser() == null;
+        } else return getUser().equals(other.getUser());
     }
 
     @Override

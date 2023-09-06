@@ -1,8 +1,10 @@
 package com.notifyme.application.service;
 
 import com.notifyme.application.dto.UserRegisterRequest;
+import com.notifyme.application.model.TokenStatus;
 import com.notifyme.application.model.User;
 import com.notifyme.application.model.UserType;
+import com.notifyme.application.model.VerificationToken;
 import com.notifyme.application.repository.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,6 +15,7 @@ import org.junit.jupiter.params.provider.EnumSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
+import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
@@ -21,6 +24,7 @@ import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.Calendar;
 import java.util.Locale;
 
 import static org.junit.Assert.assertEquals;
@@ -43,6 +47,7 @@ class RegisterAuthenticationServiceTest {
     private UserRepository userRepository;
     @Mock
     private VerificationTokenRepository tokenRepository;
+
     @Mock
     private CustomerRepository customerRepository;
     @Mock
@@ -54,12 +59,17 @@ class RegisterAuthenticationServiceTest {
 
     private RegisterAuthenticationService underTest;
 
+    @Mock
+    private VerificationToken token;
+
+
     @BeforeEach
     void setUp() {
         underTest = new RegisterAuthenticationService(authenticationManager,
                 userRepository, tokenRepository, customerRepository,
                 passwordEncoder, jwtService, employeeRepository,
                 adminRepository, eventPublisher);
+        token = new VerificationToken();
     }
 
 
@@ -141,6 +151,40 @@ class RegisterAuthenticationServiceTest {
     @Test
     void nullRole() {
         assertThrows(RuntimeException.class, () -> validateRole(null));
+    }
+
+    @Test
+    void whenEmailDoesNotMatch() {
+        // given
+        final String email = "c.e@email.com";
+        final String confirmEmail = "ce@email.com";
+        UserRegisterRequest registerRequest = new UserRegisterRequest();
+        registerRequest.setEmail(email);
+        registerRequest.setConfirmEmail(confirmEmail);
+        registerRequest.setType(UserType.EMPLOYEE.toString());
+        when(userRepository.existsByEmailAddress(email)).thenReturn(false);
+        // when
+        // then
+        assertThrows(IllegalArgumentException.class, () -> underTest.registerNewCustomer(registerRequest, null));
+    }
+
+    @Test
+    void whenSuccessfulEmailConfirmation() {
+        // given
+        String tokenValue = "yJhb6IkpXVCJ9.eyJzdWIiOiIx4I6MTUxNjIzOTAyMn0.tyh-VfuzIxCyGYDlkB";
+        User user = new User();
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.MINUTE, 6);
+        token.setToken(tokenValue);
+        token.setUser(user);
+        token.setExpiryDate(cal.getTime());
+        when(tokenRepository.findByToken(tokenValue)).thenReturn(token);
+
+        // when
+        String result = underTest.validateVerificationToken(tokenValue);
+
+        // then
+        Assertions.assertEquals(TokenStatus.VALIDTOKEN.value(), result);
     }
 
     @Test
