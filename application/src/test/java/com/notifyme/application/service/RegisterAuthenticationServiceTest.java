@@ -197,8 +197,8 @@ class RegisterAuthenticationServiceTest {
         String tokenValue = "yJhb6IkpXVCJ9.eyJzdWIiOiIx4I6MTUxNjIzOTAyMn0.tyh-VfuzIxCyGYDlkB";
         User user = new User();
         Calendar cal = Calendar.getInstance();
-//        cal.add(Calendar.DAY_OF_WEEK, -1);
-        cal.set(Calendar.DAY_OF_WEEK, cal.get(Calendar.DAY_OF_WEEK) - 1);
+//        cal.add(Calendar.MINUTE, -EXPIRATION);
+        cal.set(Calendar.MINUTE, cal.get(Calendar.MINUTE) - EXPIRATION);
         token.setToken(tokenValue);
         token.setUser(user);
         token.setExpiryDate(cal.getTime());
