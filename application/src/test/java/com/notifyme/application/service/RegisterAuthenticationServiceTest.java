@@ -12,10 +12,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
-import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
-import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
@@ -27,16 +25,16 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.util.Calendar;
 import java.util.Locale;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(MockitoExtension.class)
 class RegisterAuthenticationServiceTest {
 
+    private static final int EXPIRATION = 60 * 24;
     @Mock
     private AdminRepository adminRepository;
     @Mock
@@ -47,7 +45,6 @@ class RegisterAuthenticationServiceTest {
     private UserRepository userRepository;
     @Mock
     private VerificationTokenRepository tokenRepository;
-
     @Mock
     private CustomerRepository customerRepository;
     @Mock
@@ -56,12 +53,9 @@ class RegisterAuthenticationServiceTest {
     private JWTService jwtService;
     @Mock
     private ApplicationEventPublisher eventPublisher;
-
     private RegisterAuthenticationService underTest;
-
     @Mock
     private VerificationToken token;
-
 
     @BeforeEach
     void setUp() {
@@ -109,8 +103,6 @@ class RegisterAuthenticationServiceTest {
         assertThat(capturedUser.getType()).isEqualTo(customerType);
         assertThat(capturedUser.getLastName()).isEqualTo("lastName");
         assertThat(capturedUser.getFirstName()).isEqualTo("firstName");
-//        Assert.assertEquals(ResponseEntity.badRequest().body("Email used"), response);
-
     }
 
     @Test
@@ -174,7 +166,7 @@ class RegisterAuthenticationServiceTest {
         String tokenValue = "yJhb6IkpXVCJ9.eyJzdWIiOiIx4I6MTUxNjIzOTAyMn0.tyh-VfuzIxCyGYDlkB";
         User user = new User();
         Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.MINUTE, 6);
+        cal.add(Calendar.HOUR, 6);
         token.setToken(tokenValue);
         token.setUser(user);
         token.setExpiryDate(cal.getTime());
@@ -186,6 +178,39 @@ class RegisterAuthenticationServiceTest {
         // then
         Assertions.assertEquals(TokenStatus.VALIDTOKEN.value(), result);
     }
+
+    @Test
+    void whenFailedEmailConfirmationTokenInvalid() {
+        // given
+        String tokenValue = "yJhb6IkpXVCJ9.eyJzdWIiOiIx4I6MTUxNjIzOTAyMn0.tyh-VfuzIxCyGYDlkB";
+        // when
+        // token couldn't be found in db
+        when(tokenRepository.findByToken(tokenValue)).thenReturn(null);
+        // then
+        Assertions.assertEquals(TokenStatus.INVALIDTOKEN.value(),
+                underTest.validateVerificationToken(tokenValue));
+    }
+
+    @Test
+    void whenFailedEmailConfirmationTokenExpired() {
+        // given
+        String tokenValue = "yJhb6IkpXVCJ9.eyJzdWIiOiIx4I6MTUxNjIzOTAyMn0.tyh-VfuzIxCyGYDlkB";
+        User user = new User();
+        Calendar cal = Calendar.getInstance();
+//        cal.add(Calendar.DAY_OF_WEEK, -1);
+        cal.set(Calendar.DAY_OF_WEEK, cal.get(Calendar.DAY_OF_WEEK) - 1);
+        token.setToken(tokenValue);
+        token.setUser(user);
+        token.setExpiryDate(cal.getTime());
+        when(tokenRepository.findByToken(tokenValue)).thenReturn(token);
+
+        // when
+        String result = underTest.validateVerificationToken(tokenValue);
+
+        // then
+        Assertions.assertEquals(TokenStatus.EXPIREDTOKEN.value(), result);
+    }
+
 
     @Test
     void loginUser() {
