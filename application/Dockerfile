@@ -2,8 +2,8 @@
 # Build stage
 #
 FROM maven:3.6.3-openjdk-17 AS build
-COPY src /home/app/src
-COPY pom.xml /home/app
+COPY application/src /home/app/src
+COPY application/pom.xml /home/app
 WORKDIR /home/app
 RUN mvn install -DskipTests
 
