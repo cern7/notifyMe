@@ -1,5 +1,6 @@
 package com.notifyme.application.events.listener.reminder;
 
+import com.notifyme.application.dto.EmailDetails;
 import com.notifyme.application.dto.ReminderDTO;
 import com.notifyme.application.events.GenericEvent;
 import com.notifyme.application.service.email.EmailSender;
@@ -10,6 +11,7 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Component;
 
 import java.util.Locale;
+
 // https://stackoverflow.com/questions/71452445/eventlistener-for-generic-events-with-spring
 @Component
 public class GenericReminderListener {
@@ -34,26 +36,26 @@ public class GenericReminderListener {
     public void sendReminder(final GenericEvent<ReminderDTO> event) {
         bookingService.updateBookingStatus(
                 event.getType().getBookingId(), true);
-        final SimpleMailMessage email = constructEmailMessage(event);
+        final EmailDetails email = constructEmailMessage(event);
         mailSender.send(email);
     }
 
-    private final SimpleMailMessage constructEmailMessage(
+    private EmailDetails constructEmailMessage(
             final GenericEvent<ReminderDTO> reminderEvent) {
         final String recipientAddress = reminderEvent.getType().getCustomerEmail();
         final String subject = "Booking Reminder";
-        final String message = messages.getMessage("message.Reminder", null,
-                "Hey there, " + reminderEvent.getType().getCustomerName() + "! Just a quick reminder " +
-                        "that you are scheduled for a visit to [BUSINESS NAME] on " +
-                        reminderEvent.getType().getBookingDate() + ". If you have any questions or " +
-                        "you need to reschedule, don't hesitate to call us at +40-755-570-090.",
-                Locale.ROOT);
-        final SimpleMailMessage email = new SimpleMailMessage();
+        final String message = String.format("Hey there, %s! Just a quick reminder that " +
+                        "you are scheduled for a visit to [BUSINESS NAME] on %s." +
+                        " If you have any questions or you need to reschedule, " +
+                        "don't hesitate to call us at +40-755-xxx-xxx.",
+                reminderEvent.getType().getCustomerName(),
+                reminderEvent.getType().getBookingDate());
+
+        final EmailDetails email = new EmailDetails();
         email.setTo(recipientAddress);
         email.setSubject(subject);
         email.setText(message);
-        email.setFrom("office@motifyme.com");
-
+        email.setCategory("Reminder");
         return email;
     }
 }
