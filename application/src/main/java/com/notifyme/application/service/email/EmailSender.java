@@ -1,8 +1,8 @@
 package com.notifyme.application.service.email;
 
-import org.springframework.mail.SimpleMailMessage;
+import com.notifyme.application.dto.EmailDetails;
 
 public interface EmailSender {
-    void send(SimpleMailMessage email);
+    void send(EmailDetails email);
 
 }
