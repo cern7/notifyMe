@@ -5,6 +5,7 @@ import com.notifyme.application.dto.ReminderDTO;
 import com.notifyme.application.events.GenericEvent;
 import com.notifyme.application.service.email.EmailSender;
 import com.notifyme.application.service.BookingService;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.MessageSource;
 import org.springframework.context.event.EventListener;
 import org.springframework.mail.SimpleMailMessage;
@@ -16,15 +17,14 @@ import java.util.Locale;
 @Component
 public class GenericReminderListener {
     private final BookingService bookingService;
+    @Qualifier
     private final EmailSender mailSender;
-    private final MessageSource messages;
+
 
     public GenericReminderListener(BookingService bookingService,
-                                   EmailSender mailSender,
-                                   MessageSource messages) {
+                                   EmailSender mailSender) {
         this.bookingService = bookingService;
         this.mailSender = mailSender;
-        this.messages = messages;
     }
 
 
