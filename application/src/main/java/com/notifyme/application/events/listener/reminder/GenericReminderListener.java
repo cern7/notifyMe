@@ -17,7 +17,7 @@ import java.util.Locale;
 @Component
 public class GenericReminderListener {
     private final BookingService bookingService;
-    @Qualifier
+    @Qualifier("MailtrapService")
     private final EmailSender mailSender;
 
 
