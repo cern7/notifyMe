@@ -16,6 +16,7 @@ import java.util.UUID;
 public class GenericRegistrationListener {
     private final RegisterAuthenticationService registerService;
 
+
     @Qualifier("MailtrapService")
     private final EmailSender mailSender;
 
