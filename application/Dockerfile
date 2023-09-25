@@ -5,7 +5,11 @@ FROM maven:3.6.3-openjdk-17 AS build
 COPY application/src /home/app/src
 COPY application/pom.xml /home/app
 ARG jwt_secret
+ARG jwt_accessTokenValidityMs
+ARG jwt_cookieName
 ENV jwt.secret=$jwt_secret
+ENV jwt.accessTokenValidityMS=$jwt_accessTokenValidityMs
+ENV jwt.cookieName=$jwt_cookieName
 WORKDIR /home/app
 RUN mvn install
 
