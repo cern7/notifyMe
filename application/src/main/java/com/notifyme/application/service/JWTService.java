@@ -23,7 +23,7 @@ public class JWTService {
     private String jwtSecret;
 
     @Value("${jwt.accessTokenValidityMS}")
-    private int jwtExpirationMs;
+    private String jwtExpirationMs;
 
     @Value("${jwt.cookieName}")
     private String jwtCookie;
@@ -56,7 +56,7 @@ public class JWTService {
                 .setIssuedAt(new Date())
                 .claim("userId", user.getIID())
                 .claim("userType", user.getType())
-                .setExpiration(new Date(new Date().getTime() + jwtExpirationMs))
+                .setExpiration(new Date(new Date().getTime() + Integer.parseInt(jwtExpirationMs)))
                 .signWith(SignatureAlgorithm.HS512, jwtSecret)
                 .compact();
     }
