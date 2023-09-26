@@ -7,9 +7,11 @@ COPY application/pom.xml /home/app
 ARG jwt_secret
 ARG jwt_accessTokenValidityMs
 ARG jwt_cookieName
+ARG mail_trap_token
 ENV jwt.secret=$jwt_secret
 ENV jwt.accessTokenValidityMS=$jwt_accessTokenValidityMs
 ENV jwt.cookieName=$jwt_cookieName
+ENV mailtrap.token=$mail_trap_token
 WORKDIR /home/app
 RUN mvn install
 
