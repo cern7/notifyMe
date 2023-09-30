@@ -1,9 +1,8 @@
 FROM node:19-alpine
-WORKDIR /appUI/
-COPY package*.json /appUI/.
-RUN ls -l /appUI/
+WORKDIR /app
+COPY package*.json . 
 RUN npm install
-COPY . /appUI/.
+COPY . .
 
 EXPOSE 5173
 CMD ["npm", "run", "dev"]
