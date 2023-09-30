@@ -1,8 +1,8 @@
 FROM node:19-alpine
 WORKDIR /appUI
 COPY package*.json /appUI/
-COPY public/ /appUI/public
-COPY src/ /appUI/src
+COPY notife-me-app-ui/public /appUI/public
+COPY notife-me-app-ui/src /appUI/src
 RUN npm install
 
 EXPOSE 5173
