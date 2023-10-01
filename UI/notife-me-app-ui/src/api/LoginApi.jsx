@@ -1,5 +1,5 @@
 import axios from "axios";
-const BASE_API = "http://localhost:8080/api/auth/login";
+const BASE_API = `http://${BACKEND_API_URL}:8080/api/auth/login`;
 
 const postMethodConfig = {
   headers: {
