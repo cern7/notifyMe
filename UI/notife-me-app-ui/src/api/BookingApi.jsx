@@ -1,5 +1,5 @@
 import axios from "axios";
-const BOOKING_API = "http://localhost:8080/api/booking/";
+const BOOKING_API = `${import.meta.env.VITE_BACKEND_API_URL}/api/booking/`;
 
 // import Cookies from 'js-cookie';
 

@@ -1,5 +1,5 @@
 import axios from "axios";
-const BASE_API = "http://localhost:8080/api/auth/register";
+const BASE_API = `${import.meta.env.VITE_BACKEND_API_URL}/api/auth/register`;
 
 const postMethodConfig = {
   header: {

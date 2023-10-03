@@ -1,7 +1,10 @@
 import axios from "axios";
-const BASE_API = `http://${BACKEND_API_URL}:8080/api/auth/login`;
+const BASE_API = `${import.meta.env.VITE_BACKEND_API_URL}/api/auth/login`;
+console.log(BASE_API);
+
 
 const postMethodConfig = {
+
   headers: {
     'Content-type': 'application/json; charset=UTF-8',
     'withCredentials': true,
