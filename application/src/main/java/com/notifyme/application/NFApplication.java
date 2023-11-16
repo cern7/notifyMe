@@ -9,7 +9,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import javax.persistence.Version;
+
 
 @SpringBootApplication
 @EnableScheduling
@@ -27,7 +27,7 @@ public class NFApplication {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(@NotNull CorsRegistry registry) {
-                registry.addMapping("/api/*").allowedOrigins(allowDomain);
+                registry.addMapping("/api/**").allowedOrigins(allowDomain);
                 System.out.println(allowDomain + "/api/");
             }
         };
