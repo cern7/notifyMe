@@ -28,6 +28,7 @@ public class NFApplication {
             @Override
             public void addCorsMappings(@NotNull CorsRegistry registry) {
                 registry.addMapping("/api/*").allowedOrigins(allowDomain);
+                System.out.println(allowDomain + "/api/");
             }
         };
     }
