@@ -3,6 +3,8 @@ package com.notifyme.application.security;
 import com.notifyme.application.exception.AccessDeniedHandlerImpl;
 import com.notifyme.application.exception.AuthExceptionHandler;
 import com.notifyme.application.exception.DefaultExceptionHandler;
+import org.jetbrains.annotations.NotNull;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -16,16 +18,21 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-public class SecurityConfig {
+public class SecurityConfig implements WebMvcConfigurer {
 
     private final UserDetailsServiceImpl userDetailsService;
     private final AuthTokenFilter authenticationJwtTokenFilter;
     private final AuthExceptionHandler authExceptionHandler;
     private final AccessDeniedHandlerImpl accessDeniedHandler;
+
+    @Value("${allow.domain}")
+    private String allowDomain;
 
     // add exception handler for unauthorized access and
     // access denied
@@ -49,6 +56,14 @@ public class SecurityConfig {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Override
+    public void addCorsMappings(@NotNull CorsRegistry registry) {
+        registry.addMapping("/**")
+                .allowedOrigins(allowDomain)
+                .allowedMethods("GET", "POST")
+                .allowedHeaders("*");
     }
 
     @Bean
