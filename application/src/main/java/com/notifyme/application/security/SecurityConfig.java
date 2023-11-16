@@ -31,8 +31,8 @@ public class SecurityConfig implements WebMvcConfigurer {
     private final AuthExceptionHandler authExceptionHandler;
     private final AccessDeniedHandlerImpl accessDeniedHandler;
 
-    @Value("${allow.domain}")
-    private String allowDomain;
+//    @Value("${allow.domain}")
+//    private String allowDomain;
 
     // add exception handler for unauthorized access and
     // access denied
@@ -58,13 +58,13 @@ public class SecurityConfig implements WebMvcConfigurer {
         return new BCryptPasswordEncoder();
     }
 
-    @Override
-    public void addCorsMappings(@NotNull CorsRegistry registry) {
-        registry.addMapping("/**")
-                .allowedOrigins(allowDomain)
-                .allowedMethods("GET", "POST")
-                .allowedHeaders("*");
-    }
+//    @Override
+//    public void addCorsMappings(@NotNull CorsRegistry registry) {
+//        registry.addMapping("/**")
+//                .allowedOrigins(allowDomain)
+//                .allowedMethods("GET", "POST")
+//                .allowedHeaders("*");
+//    }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
