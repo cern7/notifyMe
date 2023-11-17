@@ -27,8 +27,11 @@ public class NFApplication {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(@NotNull CorsRegistry registry) {
-                registry.addMapping("/api/**").allowedOrigins(allowDomain);
-                System.out.println(allowDomain + "/api/**=======");
+                registry
+                        .addMapping("/api/**")
+                        .allowedOrigins(allowDomain)
+                        .allowedMethods("POST", "GET");
+                System.out.println(allowDomain + "/api/");
             }
         };
     }
