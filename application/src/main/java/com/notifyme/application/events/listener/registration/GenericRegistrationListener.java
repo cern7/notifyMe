@@ -7,6 +7,7 @@ import com.notifyme.application.model.User;
 import com.notifyme.application.service.RegisterAuthenticationService;
 import com.notifyme.application.service.email.EmailSender;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
@@ -16,6 +17,8 @@ import java.util.UUID;
 public class GenericRegistrationListener {
     private final RegisterAuthenticationService registerService;
 
+    @Value("${SUBDOMAIN}")
+    private static String subdomain;
 
     @Qualifier("MailtrapService")
     private final EmailSender mailSender;
@@ -45,7 +48,7 @@ public class GenericRegistrationListener {
                                                final String token) {
         final String recipientAddress = user.getEmailAddress();
         final String subject = "Registration Confirmation";
-        final String confirmationUrl = "http://localhost:5173/register/confirmEmail/" + token;
+        final String confirmationUrl = subdomain + "/register/confirmEmail/" + token;
         final String message = "You registered successfully. To confirm your " +
                 "registration, please click on the below link.";
         final EmailDetails email = new EmailDetails();
