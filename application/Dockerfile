@@ -13,8 +13,6 @@ ARG PGPORT
 ARG PGDATABASE
 ARG PGUSER
 ARG PGPASSWORD
-ARG allow_domain
-ARG domain_url
 ENV jwt.secret=$jwt_secret
 ENV jwt.accessTokenValidityMS=$jwt_accessTokenValidityMs
 ENV jwt.cookieName=$jwt_cookieName
@@ -23,8 +21,6 @@ ENV SPRING_DATASOURCE_URL=jdbc:postgresql://$PGHOST:$PGPORT/$PGDATABASE
 ENV SPRING_DATASOURCE_USERNAME=$PGUSER
 ENV SPRING_DATASOURCE_PASSWORD=$PGPASSWORD
 ENV SPRING_DATASOURCE_DRIVER-CLASS-NAME=org.postgresql.Driver
-ENV allow.domain=$allow_domain
-ENV domain.url=$domain_url
 WORKDIR /home/app
 RUN mvn install
 

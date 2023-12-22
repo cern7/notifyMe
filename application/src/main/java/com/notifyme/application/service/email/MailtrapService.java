@@ -40,7 +40,10 @@ public class MailtrapService implements EmailSender {
                 .build();
 
         try (Response response = client.newCall(request).execute()) {
-            response.close();
+            System.out.println(response.body().toString());
+            System.out.println(response.code());
+            System.out.println(response.handshake());
+            System.out.println(request);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
