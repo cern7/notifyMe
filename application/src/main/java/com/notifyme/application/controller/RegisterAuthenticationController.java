@@ -41,13 +41,10 @@ public class RegisterAuthenticationController {
 
         final String result = registerAuthenticationService.validateVerificationToken(token);
         if (result.equals(TokenStatus.VALIDTOKEN.value())) {
-            return ResponseEntity.ok("Email confirmed"); // REDIRECT TO LOGIN
-//            return "redirect:/login.html?lang=" + locale.getLanguage();
+            return ResponseEntity.ok("Email confirmed");
         } else if (result.equals(TokenStatus.INVALIDTOKEN.value())
                 || result.equals(TokenStatus.EXPIREDTOKEN.value())) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("INVALID TOKEN");
-            // REDIRECT TO WHAT??????
-//            return "redirect:/badUser.html?lang=" + locale.getLanguage();
         }
 
         return ResponseEntity.badRequest().body("SOMETHING WENT WRONG");

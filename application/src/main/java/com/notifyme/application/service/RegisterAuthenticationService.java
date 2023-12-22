@@ -206,8 +206,7 @@ public class RegisterAuthenticationService {
         }
         user.setStatus(UserStatus.ACTIVE);
         userRepository.save(user);
-        // TODO:
-        // delete the token from the repo if confirmed
+        tokenRepository.delete(verificationToken);
         return TokenStatus.VALIDTOKEN.value();
     }
 
