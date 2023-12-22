@@ -10,6 +10,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@react-spring/web": "^9.7.3",
+    "framer-motion": "^10.16.15",
     "@chakra-ui/icons": "^2.0.19",
     "@chakra-ui/react": "^2.7.1",
     "@emotion/cache": "^11.11.0",
@@ -25,12 +27,14 @@
     "jsonwebtoken": "^9.0.0",
     "maildev": "^2.0.5",
     "react": "^18.2.0",
+    "react-hook-form": "^7.49.1",
     "react-calendar": "^4.3.0",
     "react-datetime": "^3.2.0",
     "react-datetime-picker": "^5.2.0",
     "react-dom": "^18.2.0",
     "react-redux": "^8.1.1",
     "react-router-dom": "^6.14.1",
+    "react-icons": "^4.12.0",
     "uuid": "^9.0.0"
   },
   "devDependencies": {
