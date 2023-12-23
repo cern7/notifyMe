@@ -16,6 +16,10 @@ import java.util.UUID;
 public class GenericRegistrationListener {
     private final RegisterAuthenticationService registerService;
 
+    
+    @Value("${domain.url}")
+    private String subdomain;
+
 
     @Qualifier("MailtrapService")
     private final EmailSender mailSender;
