@@ -17,6 +17,7 @@ import java.util.UUID;
 public class GenericRegistrationListener {
     private final RegisterAuthenticationService registerService;
 
+    
     @Value("${domain.url}")
     private String subdomain;
 
