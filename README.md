@@ -108,6 +108,7 @@ Implement a robust notification system that automatically reminds customers of t
 ### 3. User-Friendly Interface
 
 Developed using React.js, the frontend interface ensures a seamless and intuitive experience for businesses. The user-friendly design allows for easy navigation and utilization of the application, eliminating the need for extensive training.
+![UI](image-1.png)
 
 ### 4. Data Security and Integrity
 
@@ -116,6 +117,7 @@ Ensuring the confidentiality and integrity of customer and business data is a to
 ### 5. Java Spring Backend
 
 The application is powered by a Java Spring backend, offering a robust and scalable foundation for the seamless integration of various functionalities. This ensures a stable and efficient performance for businesses of all sizes.
+![backend](image-2.png)
 
 ### 6. Growth and Success
 
