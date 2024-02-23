@@ -26,7 +26,7 @@ By addressing these key challenges, the NotifyMe app aims to empower small busin
 Can be adapted to your business needs.
 ```mermaid
 erDiagram
-USER |o--|| CUSTOMER : is
+USER ||--|| CUSTOMER : is
 USER ||--|| ADMIN : is
 USER ||--|| EMPLOYEE : is
 SERVICE }o--|| BOOKING : has
